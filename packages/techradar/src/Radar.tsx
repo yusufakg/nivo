@@ -1,10 +1,6 @@
 import { ReactNode, Fragment, createElement } from 'react'
 import { Container, useDimensions, SvgWrapper } from '@nivo/core'
-import { BoxLegendSvg } from '@nivo/legends'
-import { RadarLayer } from './RadarLayer'
 import { RadarGrid } from './RadarGrid'
-import { RadarSlices } from './RadarSlices'
-import { RadarDots } from './RadarDots'
 import { svgDefaultProps } from './props'
 import { RadarLayerId, RadarSvgProps } from './types'
 import { useRadar } from './hooks'
@@ -20,31 +16,14 @@ const InnerRadar = <D extends Record<string, unknown>>({
     indexBy,
     layers = svgDefaultProps.layers,
     rotation: rotationDegrees = svgDefaultProps.rotation,
-    maxValue = svgDefaultProps.maxValue,
-    valueFormat,
     margin: partialMargin,
     width,
     height,
-    borderWidth = svgDefaultProps.borderWidth,
-    borderColor = svgDefaultProps.borderColor,
     gridLevels = svgDefaultProps.gridLevels,
     gridShape = svgDefaultProps.gridShape,
     gridLabel = svgDefaultProps.gridLabel,
     gridLabelOffset = svgDefaultProps.gridLabelOffset,
-    enableDots = svgDefaultProps.enableDots,
-    dotSymbol,
-    dotSize = svgDefaultProps.dotSize,
-    dotColor = svgDefaultProps.dotColor,
-    dotBorderWidth = svgDefaultProps.dotBorderWidth,
-    dotBorderColor = svgDefaultProps.dotBorderColor,
-    enableDotLabel = svgDefaultProps.enableDotLabel,
-    dotLabel = svgDefaultProps.dotLabel,
-    dotLabelYOffset = svgDefaultProps.dotLabelYOffset,
     colors = svgDefaultProps.colors,
-    fillOpacity = svgDefaultProps.fillOpacity,
-    blendMode = svgDefaultProps.blendMode,
-    isInteractive = svgDefaultProps.isInteractive,
-    legends = svgDefaultProps.legends,
     role,
     ariaLabel,
     ariaLabelledBy,
@@ -59,41 +38,28 @@ const InnerRadar = <D extends Record<string, unknown>>({
     )
 
     const {
-        getIndex,
         indices,
-        formatValue,
-        colorByKey,
-        fillByKey,
         boundDefs,
         rotation,
         radius,
-        radiusScale,
         centerX,
         centerY,
         angleStep,
-        boundLegends,
         customLayerProps,
     } = useRadar<D>({
         data,
         keys,
         indexBy,
         rotationDegrees,
-        maxValue,
-        valueFormat,
         width: innerWidth,
         height: innerHeight,
         colors,
-        legends,
         defs,
         fill,
     })
 
     const layerById: Record<RadarLayerId, ReactNode> = {
         grid: null,
-        layers: null,
-        slices: null,
-        dots: null,
-        legends: null,
     }
 
     if (layers.includes('grid')) {
@@ -110,86 +76,6 @@ const InnerRadar = <D extends Record<string, unknown>>({
                     labelOffset={gridLabelOffset}
                 />
             </g>
-        )
-    }
-
-    if (layers.includes('layers')) {
-        layerById.layers = (
-            <g key="layers" transform={`translate(${centerX}, ${centerY})`}>
-                {keys.map(key => (
-                    <RadarLayer<D>
-                        key={key}
-                        data={data}
-                        item={key}
-                        colorByKey={colorByKey}
-                        fillByKey={fillByKey}
-                        radiusScale={radiusScale}
-                        rotation={rotation}
-                        angleStep={angleStep}
-                        borderWidth={borderWidth}
-                        borderColor={borderColor}
-                        fillOpacity={fillOpacity}
-                        blendMode={blendMode}
-                    />
-                ))}
-            </g>
-        )
-    }
-
-    if (layers.includes('slices') && isInteractive) {
-        layerById.slices = (
-            <g key="slices" transform={`translate(${centerX}, ${centerY})`}>
-                <RadarSlices<D>
-                    data={data}
-                    keys={keys}
-                    getIndex={getIndex}
-                    formatValue={formatValue}
-                    colorByKey={colorByKey}
-                    radius={radius}
-                    rotation={rotation}
-                    angleStep={angleStep}
-                />
-            </g>
-        )
-    }
-
-    if (layers.includes('dots') && enableDots) {
-        layerById.dots = (
-            <g key="dots" transform={`translate(${centerX}, ${centerY})`}>
-                <RadarDots<D>
-                    data={data}
-                    keys={keys}
-                    getIndex={getIndex}
-                    radiusScale={radiusScale}
-                    rotation={rotation}
-                    angleStep={angleStep}
-                    symbol={dotSymbol}
-                    size={dotSize}
-                    colorByKey={colorByKey}
-                    color={dotColor}
-                    borderWidth={dotBorderWidth}
-                    borderColor={dotBorderColor}
-                    enableLabel={enableDotLabel}
-                    label={dotLabel}
-                    formatValue={formatValue}
-                    labelYOffset={dotLabelYOffset}
-                />
-            </g>
-        )
-    }
-
-    if (layers.includes('legends')) {
-        layerById.legends = (
-            <Fragment key="legends">
-                {boundLegends.map((legend, i) => (
-                    <BoxLegendSvg
-                        key={i}
-                        {...legend}
-                        containerWidth={width}
-                        containerHeight={height}
-                    />
-                ))}
-            </Fragment>
         )
     }
 
@@ -216,7 +102,6 @@ const InnerRadar = <D extends Record<string, unknown>>({
 }
 
 export const Radar = <D extends Record<string, unknown>>({
-    isInteractive = svgDefaultProps.isInteractive,
     animate = svgDefaultProps.animate,
     motionConfig = svgDefaultProps.motionConfig,
     theme,
@@ -226,12 +111,11 @@ export const Radar = <D extends Record<string, unknown>>({
     <Container
         {...{
             animate,
-            isInteractive,
             motionConfig,
             renderWrapper,
             theme,
         }}
     >
-        <InnerRadar<D> isInteractive={isInteractive} {...otherProps} />
+        <InnerRadar<D> {...otherProps} />
     </Container>
 )

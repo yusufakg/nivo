@@ -35,6 +35,7 @@
         "@nivo/parallel-coordinates": "workspace:*",
         "@nivo/pie": "workspace:*",
         "@nivo/radar": "workspace:*",
+        "@nivo/techradar": "workspace:*",
         "@nivo/radial-bar": "workspace:*",
         "@nivo/sankey": "workspace:*",
         "@nivo/scatterplot": "workspace:*",

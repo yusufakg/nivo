@@ -35,6 +35,7 @@
         { "path": "./packages/network" },
         { "path": "./packages/pie" },
         { "path": "./packages/radar" },
+        { "path": "./packages/techradar" },
         { "path": "./packages/radial-bar" },
         { "path": "./packages/sankey" },
         { "path": "./packages/scatterplot" },

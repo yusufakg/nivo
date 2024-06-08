@@ -1461,6 +1461,39 @@ importers:
                 specifier: 18.2.0
                 version: 18.2.0
 
+    packages/techradar:
+        dependencies:
+            '@nivo/colors':
+                specifier: workspace:*
+                version: link:../colors
+            '@nivo/core':
+                specifier: workspace:*
+                version: link:../core
+            '@nivo/legends':
+                specifier: workspace:*
+                version: link:../legends
+            '@nivo/tooltip':
+                specifier: workspace:*
+                version: link:../tooltip
+            '@react-spring/web':
+                specifier: 9.4.5 || ^9.7.2
+                version: 9.7.2(react-dom@18.2.0)(react@18.2.0)
+            '@types/d3-scale':
+                specifier: ^4.0.8
+                version: 4.0.8
+            '@types/d3-shape':
+                specifier: ^3.1.6
+                version: 3.1.6
+            d3-scale:
+                specifier: ^4.0.2
+                version: 4.0.2
+            d3-shape:
+                specifier: ^3.2.0
+                version: 3.2.0
+            react:
+                specifier: 18.2.0
+                version: 18.2.0
+
     packages/text:
         dependencies:
             '@nivo/core':
@@ -1697,6 +1730,9 @@ importers:
             '@nivo/swarmplot':
                 specifier: workspace:*
                 version: link:../packages/swarmplot
+            '@nivo/techradar':
+                specifier: workspace:*
+                version: link:../packages/techradar
             '@nivo/tooltip':
                 specifier: workspace:*
                 version: link:../packages/tooltip

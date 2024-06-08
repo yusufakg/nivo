@@ -8,7 +8,6 @@ import {
     MotionProps,
     PropertyAccessor,
     ValueFormat,
-    ClosedCurveFactoryId,
     DotsItemSymbolComponent,
     SvgDefsAndFill,
 } from '@nivo/core'
@@ -54,19 +53,6 @@ export interface PointProps {
     }
 }
 
-export interface RadarSliceTooltipDatum {
-    color: string
-    id: string
-    value: number
-    formattedValue: string
-}
-
-export interface RadarSliceTooltipProps {
-    index: string | number
-    data: RadarSliceTooltipDatum[]
-}
-export type RadarSliceTooltipComponent = FunctionComponent<RadarSliceTooltipProps>
-
 export interface RadarCustomLayerProps<D extends Record<string, unknown>> {
     data: D[]
     keys: string[]
@@ -96,8 +82,6 @@ export interface RadarCommonProps<D extends Record<string, unknown>> {
 
     margin: Box
 
-    curve: ClosedCurveFactoryId
-
     gridLevels: number
     gridShape: 'circular' | 'linear'
     gridLabel: GridLabelComponent
@@ -122,7 +106,6 @@ export interface RadarCommonProps<D extends Record<string, unknown>> {
     borderColor: InheritedColorConfig<{ key: string; color: string }>
 
     isInteractive: boolean
-    sliceTooltip: RadarSliceTooltipComponent
 
     renderWrapper: boolean
 

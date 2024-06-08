@@ -2,36 +2,17 @@ import { RadarGridLabel } from './RadarGridLabel'
 import { RadarLayerId } from './types'
 
 export const svgDefaultProps = {
-    layers: ['grid', 'layers', 'slices', 'dots', 'legends'] as RadarLayerId[],
-
-    maxValue: 'auto' as const,
+    layers: ['grid'] as RadarLayerId[],
 
     rotation: 0,
 
-    borderWidth: 2,
-    borderColor: { from: 'color' },
-
-    gridLevels: 5,
+    gridLevels: 3,
     gridShape: 'circular' as const,
     gridLabelOffset: 16,
     gridLabel: RadarGridLabel,
 
-    enableDots: true,
-    dotSize: 6,
-    dotColor: { from: 'color' },
-    dotBorderWidth: 0,
-    dotBorderColor: { from: 'color' },
-    enableDotLabel: false,
-    dotLabel: 'formattedValue',
-    dotLabelYOffset: -12,
-
     colors: { scheme: 'nivo' as const },
-    fillOpacity: 0.25,
-    blendMode: 'normal' as const,
 
-    isInteractive: true,
-
-    legends: [],
     role: 'img',
 
     animate: true,

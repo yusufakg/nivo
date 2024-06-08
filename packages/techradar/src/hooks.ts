@@ -4,7 +4,6 @@ import {
     // @ts-ignore
     bindDefs,
     usePropertyAccessor,
-    useValueFormatter,
 } from '@nivo/core'
 import { degreesToRadians } from '@nivo/core'
 import { useOrdinalColorScale } from '@nivo/colors'
@@ -15,7 +14,6 @@ import {
     RadarDataProps,
     RadarCustomLayerProps,
     RadarSvgProps,
-    BoundLegendProps,
 } from './types'
 
 export const useRadar = <D extends Record<string, unknown>>({
@@ -23,12 +21,9 @@ export const useRadar = <D extends Record<string, unknown>>({
     keys,
     indexBy,
     rotationDegrees,
-    maxValue,
-    valueFormat,
     width,
     height,
     colors = svgDefaultProps.colors,
-    legends,
     defs,
     fill,
 }: {
@@ -36,18 +31,14 @@ export const useRadar = <D extends Record<string, unknown>>({
     keys: RadarDataProps<D>['keys']
     indexBy: RadarDataProps<D>['indexBy']
     rotationDegrees: RadarCommonProps<D>['rotation']
-    maxValue: RadarCommonProps<D>['maxValue']
-    valueFormat?: RadarCommonProps<D>['valueFormat']
     width: number
     height: number
     colors: RadarCommonProps<D>['colors']
-    legends: RadarCommonProps<D>['legends']
     defs: RadarSvgProps<D>['defs']
     fill: RadarSvgProps<D>['fill']
 }) => {
     const getIndex = usePropertyAccessor<D, string>(indexBy)
     const indices = useMemo(() => data.map(getIndex), [data, getIndex])
-    const formatValue = useValueFormatter<number, string>(valueFormat)
     const rotation = degreesToRadians(rotationDegrees)
 
     const getColor = useOrdinalColorScale<{ key: string; index: number }>(colors, 'key')
@@ -74,16 +65,9 @@ export const useRadar = <D extends Record<string, unknown>>({
     }, [keys, data, defs, fill, colorByKey])
 
     const { radius, radiusScale, centerX, centerY, angleStep } = useMemo(() => {
-        const allValues: number[] = data.reduce(
-            (acc: number[], d) => [...acc, ...keys.map(key => d[key] as number)],
-            [] as number[]
-        )
-        const computedMaxValue = maxValue !== 'auto' ? maxValue : Math.max(...allValues)
-
         const radius = Math.min(width, height) / 2
         const radiusScale = scaleLinear<number, number>()
             .range([0, radius])
-            .domain([0, computedMaxValue])
 
         return {
             radius,
@@ -92,7 +76,7 @@ export const useRadar = <D extends Record<string, unknown>>({
             centerY: height / 2,
             angleStep: (Math.PI * 2) / data.length,
         }
-    }, [keys, data, maxValue, width, height])
+    }, [keys, data, width, height])
 
     const customLayerProps: RadarCustomLayerProps<D> = useMemo(
         () => ({
@@ -108,27 +92,9 @@ export const useRadar = <D extends Record<string, unknown>>({
         [data, keys, indices, colorByKey, centerX, centerY, radiusScale, angleStep]
     )
 
-    const legendData = useMemo(
-        () => keys.map(key => ({ id: key, label: key, color: colorByKey[key] })),
-        [keys, colorByKey]
-    )
-
-    const boundLegends: BoundLegendProps[] = useMemo(
-        () =>
-            legends.map(({ data: customData, ...legend }) => {
-                const boundData = customData?.map(cd => {
-                    const findData = legendData.find(ld => ld.id === cd.id) || {}
-                    return { ...findData, ...cd }
-                })
-                return { ...legend, data: boundData || legendData }
-            }),
-        [legends, legendData]
-    )
-
     return {
         getIndex,
         indices,
-        formatValue,
         colorByKey,
         fillByKey,
         boundDefs,
@@ -138,8 +104,6 @@ export const useRadar = <D extends Record<string, unknown>>({
         centerX,
         centerY,
         angleStep,
-        legendData,
-        boundLegends,
         customLayerProps,
     }
 }

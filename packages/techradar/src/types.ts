@@ -3,16 +3,12 @@ import { AnimatedProps } from '@react-spring/web'
 import {
     Box,
     Theme,
-    CssMixBlendMode,
     Dimensions,
     MotionProps,
     PropertyAccessor,
-    ValueFormat,
-    DotsItemSymbolComponent,
     SvgDefsAndFill,
 } from '@nivo/core'
-import { InheritedColorConfig, OrdinalColorScaleConfig } from '@nivo/colors'
-import { LegendProps } from '@nivo/legends'
+import { OrdinalColorScaleConfig } from '@nivo/colors'
 import { ScaleLinear } from 'd3-scale'
 
 export interface RadarDataProps<D extends Record<string, unknown>> {
@@ -33,26 +29,6 @@ export interface GridLabelProps {
 }
 export type GridLabelComponent = FunctionComponent<GridLabelProps>
 
-export type PointData = {
-    index: string
-    key: string
-    value: number
-    formattedValue: string
-    color: string
-}
-
-export interface PointProps {
-    key: string
-    label: string | number | undefined
-    data: PointData
-    style: {
-        fill: string
-        stroke: string
-        x: number
-        y: number
-    }
-}
-
 export interface RadarCustomLayerProps<D extends Record<string, unknown>> {
     data: D[]
     keys: string[]
@@ -67,15 +43,11 @@ export type RadarCustomLayer<D extends Record<string, unknown>> = FunctionCompon
     RadarCustomLayerProps<D>
 >
 
-export type RadarLayerId = 'grid' | 'layers' | 'slices' | 'dots' | 'legends'
+export type RadarLayerId = 'grid'
 
 export type RadarColorMapping = Record<string, string>
 
 export interface RadarCommonProps<D extends Record<string, unknown>> {
-    maxValue: number | 'auto'
-    // second argument passed to the formatter is the key
-    valueFormat: ValueFormat<number, string>
-
     rotation: number
 
     layers: (RadarLayerId | RadarCustomLayer<D>)[]
@@ -87,29 +59,10 @@ export interface RadarCommonProps<D extends Record<string, unknown>> {
     gridLabel: GridLabelComponent
     gridLabelOffset: number
 
-    enableDots: boolean
-    dotSymbol: DotsItemSymbolComponent
-    dotSize: number
-    dotColor: InheritedColorConfig<PointData>
-    dotBorderWidth: number
-    dotBorderColor: InheritedColorConfig<PointData>
-    enableDotLabel: boolean
-    dotLabel: PropertyAccessor<PointData, string | number>
-    dotLabelFormat: ValueFormat<number>
-    dotLabelYOffset: number
-
     theme: Theme
     colors: OrdinalColorScaleConfig<{ key: string; index: number }>
-    fillOpacity: number
-    blendMode: CssMixBlendMode
-    borderWidth: number
-    borderColor: InheritedColorConfig<{ key: string; color: string }>
-
-    isInteractive: boolean
 
     renderWrapper: boolean
-
-    legends: LegendProps[]
 
     role: string
     ariaLabel: AriaAttributes['aria-label']
@@ -128,5 +81,3 @@ export type RadarSvgProps<D extends Record<string, unknown>> = Partial<RadarComm
     Dimensions &
     MotionProps &
     SvgDefsAndFill<RadarSvgFillMatcherDatum<D>>
-
-export type BoundLegendProps = Required<Pick<LegendProps, 'data'>> & Omit<LegendProps, 'data'>

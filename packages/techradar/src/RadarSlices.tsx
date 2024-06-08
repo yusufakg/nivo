@@ -1,6 +1,6 @@
 import { arc as d3Arc } from 'd3-shape'
 import { RadarSlice } from './RadarSlice'
-import { RadarColorMapping, RadarCommonProps, RadarDataProps } from './types'
+import { RadarColorMapping, RadarDataProps } from './types'
 
 interface RadarSlicesProps<D extends Record<string, unknown>> {
     data: RadarDataProps<D>['data']
@@ -11,7 +11,6 @@ interface RadarSlicesProps<D extends Record<string, unknown>> {
     radius: number
     rotation: number
     angleStep: number
-    tooltip: RadarCommonProps<D>['sliceTooltip']
 }
 
 export const RadarSlices = <D extends Record<string, unknown>>({
@@ -23,7 +22,6 @@ export const RadarSlices = <D extends Record<string, unknown>>({
     radius,
     rotation,
     angleStep,
-    tooltip,
 }: RadarSlicesProps<D>) => {
     const arc = d3Arc<{ startAngle: number; endAngle: number }>().outerRadius(radius).innerRadius(0)
 
@@ -51,7 +49,6 @@ export const RadarSlices = <D extends Record<string, unknown>>({
                         endAngle={endAngle}
                         radius={radius}
                         arcGenerator={arc}
-                        tooltip={tooltip}
                     />
                 )
             })}

@@ -3,7 +3,6 @@ import { scaleLinear } from 'd3-scale'
 import {
     // @ts-ignore
     bindDefs,
-    useCurveInterpolation,
     usePropertyAccessor,
     useValueFormatter,
 } from '@nivo/core'
@@ -26,7 +25,6 @@ export const useRadar = <D extends Record<string, unknown>>({
     rotationDegrees,
     maxValue,
     valueFormat,
-    curve,
     width,
     height,
     colors = svgDefaultProps.colors,
@@ -40,7 +38,6 @@ export const useRadar = <D extends Record<string, unknown>>({
     rotationDegrees: RadarCommonProps<D>['rotation']
     maxValue: RadarCommonProps<D>['maxValue']
     valueFormat?: RadarCommonProps<D>['valueFormat']
-    curve: RadarCommonProps<D>['curve']
     width: number
     height: number
     colors: RadarCommonProps<D>['colors']
@@ -97,8 +94,6 @@ export const useRadar = <D extends Record<string, unknown>>({
         }
     }, [keys, data, maxValue, width, height])
 
-    const curveFactory = useCurveInterpolation(curve)
-
     const customLayerProps: RadarCustomLayerProps<D> = useMemo(
         () => ({
             data,
@@ -143,7 +138,6 @@ export const useRadar = <D extends Record<string, unknown>>({
         centerX,
         centerY,
         angleStep,
-        curveFactory,
         legendData,
         boundLegends,
         customLayerProps,

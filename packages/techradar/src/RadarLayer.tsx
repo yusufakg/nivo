@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useSpring, animated } from '@react-spring/web'
-import { lineRadial, CurveFactory } from 'd3-shape'
+import { lineRadial } from 'd3-shape'
 import { ScaleLinear } from 'd3-scale'
 import { useMotionConfig, useTheme, useAnimatedPath } from '@nivo/core'
 import { useInheritedColor } from '@nivo/colors'
@@ -14,7 +14,6 @@ interface RadarLayerProps<D extends Record<string, unknown>> {
     radiusScale: ScaleLinear<number, number>
     rotation: number
     angleStep: number
-    curveFactory: CurveFactory
     borderWidth: RadarCommonProps<D>['borderWidth']
     borderColor: RadarCommonProps<D>['borderColor']
     fillOpacity: RadarCommonProps<D>['fillOpacity']
@@ -29,7 +28,6 @@ export const RadarLayer = <D extends Record<string, unknown>>({
     radiusScale,
     rotation,
     angleStep,
-    curveFactory,
     borderWidth,
     borderColor,
     fillOpacity,
@@ -42,8 +40,7 @@ export const RadarLayer = <D extends Record<string, unknown>>({
         return lineRadial<number>()
             .radius(d => radiusScale(d))
             .angle((_, i) => rotation + i * angleStep)
-            .curve(curveFactory)
-    }, [radiusScale, rotation, angleStep, curveFactory])
+    }, [radiusScale, rotation, angleStep])
 
     const { animate, config: springConfig } = useMotionConfig()
     const animatedPath = useAnimatedPath(lineGenerator(data.map(d => d[key] as number)) as string)

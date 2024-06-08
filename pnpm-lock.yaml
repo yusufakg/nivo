@@ -1472,9 +1472,6 @@ importers:
             '@nivo/legends':
                 specifier: workspace:*
                 version: link:../legends
-            '@nivo/tooltip':
-                specifier: workspace:*
-                version: link:../tooltip
             '@react-spring/web':
                 specifier: 9.4.5 || ^9.7.2
                 version: 9.7.2(react-dom@18.2.0)(react@18.2.0)

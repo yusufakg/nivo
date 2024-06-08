@@ -1,5 +1,4 @@
 import { RadarGridLabel } from './RadarGridLabel'
-import { RadarSliceTooltip } from './RadarSliceTooltip'
 import { RadarLayerId } from './types'
 
 export const svgDefaultProps = {
@@ -8,8 +7,6 @@ export const svgDefaultProps = {
     maxValue: 'auto' as const,
 
     rotation: 0,
-
-    curve: 'linearClosed' as const,
 
     borderWidth: 2,
     borderColor: { from: 'color' },
@@ -33,7 +30,6 @@ export const svgDefaultProps = {
     blendMode: 'normal' as const,
 
     isInteractive: true,
-    sliceTooltip: RadarSliceTooltip,
 
     legends: [],
     role: 'img',

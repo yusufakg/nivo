@@ -22,7 +22,6 @@ const InnerRadar = <D extends Record<string, unknown>>({
     rotation: rotationDegrees = svgDefaultProps.rotation,
     maxValue = svgDefaultProps.maxValue,
     valueFormat,
-    curve = svgDefaultProps.curve,
     margin: partialMargin,
     width,
     height,
@@ -45,7 +44,6 @@ const InnerRadar = <D extends Record<string, unknown>>({
     fillOpacity = svgDefaultProps.fillOpacity,
     blendMode = svgDefaultProps.blendMode,
     isInteractive = svgDefaultProps.isInteractive,
-    sliceTooltip = svgDefaultProps.sliceTooltip,
     legends = svgDefaultProps.legends,
     role,
     ariaLabel,
@@ -73,7 +71,6 @@ const InnerRadar = <D extends Record<string, unknown>>({
         centerX,
         centerY,
         angleStep,
-        curveFactory,
         boundLegends,
         customLayerProps,
     } = useRadar<D>({
@@ -83,7 +80,6 @@ const InnerRadar = <D extends Record<string, unknown>>({
         rotationDegrees,
         maxValue,
         valueFormat,
-        curve,
         width: innerWidth,
         height: innerHeight,
         colors,
@@ -130,7 +126,6 @@ const InnerRadar = <D extends Record<string, unknown>>({
                         radiusScale={radiusScale}
                         rotation={rotation}
                         angleStep={angleStep}
-                        curveFactory={curveFactory}
                         borderWidth={borderWidth}
                         borderColor={borderColor}
                         fillOpacity={fillOpacity}
@@ -153,7 +148,6 @@ const InnerRadar = <D extends Record<string, unknown>>({
                     radius={radius}
                     rotation={rotation}
                     angleStep={angleStep}
-                    tooltip={sliceTooltip}
                 />
             </g>
         )

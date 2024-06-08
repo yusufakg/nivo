@@ -1,7 +1,7 @@
 import { mount } from 'enzyme'
 import { LegendProps, BoxLegendSvg } from '@nivo/legends'
 // @ts-ignore
-import { Radar, RadarSvgProps, RadarSliceTooltipProps } from '../src'
+import { Radar, RadarSvgProps } from '../src'
 
 type TestDatum = {
     A: number
@@ -60,80 +60,6 @@ describe('layout', () => {
         const posB0 = getPos(labelB0.find('g').first().prop('transform') as string)
         expect(Number(posB0[0])).toBeCloseTo(-Number(posA0[0]), 4)
         expect(Number(posB0[1])).toBeCloseTo(Number(posA0[1]), 4)
-    })
-})
-
-describe('data', () => {
-    it('should support value formatting', () => {
-        const wrapper = mount(
-            <Radar<TestDatum> {...baseProps} valueFormat={value => `${value}%`} />
-        )
-
-        wrapper.find('RadarSlice').at(0).find('path').simulate('mouseenter')
-
-        const tooltip = wrapper.find('RadarSliceTooltip')
-        const data = tooltip.prop<RadarSliceTooltipProps['data']>('data')
-        expect(data[0].formattedValue).toEqual('20%')
-        expect(data[1].formattedValue).toEqual('10%')
-    })
-
-    it('should support value formatting depending on the key', () => {
-        const wrapper = mount(
-            <Radar<TestDatum> {...baseProps} valueFormat={(value, key) => `${value} ${key}s`} />
-        )
-
-        wrapper.find('RadarSlice').at(2).find('path').simulate('mouseenter')
-
-        const tooltip = wrapper.find('RadarSliceTooltip')
-        const data = tooltip.prop<RadarSliceTooltipProps['data']>('data')
-        expect(data[0].formattedValue).toEqual('30 As')
-        expect(data[1].formattedValue).toEqual('10 Bs')
-    })
-})
-
-describe('tooltip', () => {
-    it('should show a tooltip with index and corresponding values', () => {
-        const wrapper = mount(<Radar<TestDatum> {...baseProps} />)
-
-        const slices = wrapper.find('RadarSlice')
-        expect(slices).toHaveLength(3)
-
-        const slice0 = slices.at(0)
-        expect(slice0.prop('index')).toBe('first')
-
-        slice0.find('path').simulate('mouseenter')
-        let tooltip = wrapper.find('RadarSliceTooltip')
-        expect(tooltip.text()).toBe(['first', 'B', 20, 'A', 10].join(''))
-
-        const slice1 = slices.at(1)
-        expect(slice1.prop('index')).toBe('second')
-
-        slice1.find('path').simulate('mouseenter')
-        tooltip = wrapper.find('RadarSliceTooltip')
-        expect(tooltip.text()).toBe(['second', 'B', 30, 'A', 20].join(''))
-
-        const slice2 = slices.at(2)
-        expect(slice2.prop('index')).toBe('third')
-
-        slice2.find('path').simulate('mouseenter')
-        tooltip = wrapper.find('RadarSliceTooltip')
-        expect(tooltip.text()).toBe(['third', 'A', 30, 'B', 10].join(''))
-    })
-
-    it('should support a custom slice tooltip', () => {
-        const CustomSliceTooltip = ({ index, data }: RadarSliceTooltipProps) => (
-            <div>
-                {index}: {data.map(d => `${d.id} -> ${d.value} (${d.color})`).join(', ')}
-            </div>
-        )
-
-        const wrapper = mount(<Radar<TestDatum> {...baseProps} sliceTooltip={CustomSliceTooltip} />)
-
-        wrapper.find('RadarSlice').at(1).find('path').simulate('mouseenter')
-
-        const tooltip = wrapper.find('CustomSliceTooltip')
-        expect(tooltip.exists()).toBe(true)
-        expect(tooltip.text()).toBe('second: B -> 30 (#f47560), A -> 20 (#e8c1a0)')
     })
 })
 

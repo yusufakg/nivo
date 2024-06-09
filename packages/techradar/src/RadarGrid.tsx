@@ -1,5 +1,5 @@
-import { SVGProps, useMemo } from 'react'
 import { positionFromAngle, useTheme } from '@nivo/core'
+import { SVGProps, useMemo } from 'react'
 import { RadarGridLabels } from './RadarGridLabels'
 import { RadarGridLevels } from './RadarGridLevels'
 import { GridLabelComponent, RadarCommonProps } from './types'

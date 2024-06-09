@@ -1,10 +1,10 @@
-import { createElement, useMemo, MouseEvent } from 'react'
-import * as React from 'react'
-import { useTransition, to, SpringValue } from '@react-spring/web'
-import { useMotionConfig, useTheme } from '@nivo/core'
 import { useInheritedColor } from '@nivo/colors'
+import { useMotionConfig, useTheme } from '@nivo/core'
 import { useTooltip } from '@nivo/tooltip'
-import { ComputedDatum, CircleComponent, MouseHandlers, CirclePackingCommonProps } from './types'
+import { SpringValue, to, useTransition } from '@react-spring/web'
+import * as React from 'react'
+import { MouseEvent, createElement, useMemo } from 'react'
+import { CircleComponent, CirclePackingCommonProps, ComputedDatum, MouseHandlers } from './types'
 
 /**
  * A negative radius value is invalid for an SVG circle,

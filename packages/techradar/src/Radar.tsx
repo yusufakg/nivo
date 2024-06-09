@@ -1,9 +1,9 @@
-import { ReactNode, Fragment, createElement } from 'react'
-import { Container, useDimensions, SvgWrapper } from '@nivo/core'
+import { Container, SvgWrapper, useDimensions } from '@nivo/core'
+import { Fragment, ReactNode, createElement } from 'react'
 import { RadarGrid } from './RadarGrid'
+import { useRadar } from './hooks'
 import { svgDefaultProps } from './props'
 import { RadarLayerId, RadarSvgProps } from './types'
-import { useRadar } from './hooks'
 
 type InnerRadarProps<D extends Record<string, unknown>> = Omit<
     RadarSvgProps<D>,
@@ -37,26 +37,18 @@ const InnerRadar = <D extends Record<string, unknown>>({
         partialMargin
     )
 
-    const {
-        indices,
-        boundDefs,
-        rotation,
-        radius,
-        centerX,
-        centerY,
-        angleStep,
-        customLayerProps,
-    } = useRadar<D>({
-        data,
-        keys,
-        indexBy,
-        rotationDegrees,
-        width: innerWidth,
-        height: innerHeight,
-        colors,
-        defs,
-        fill,
-    })
+    const { indices, boundDefs, rotation, radius, centerX, centerY, angleStep, customLayerProps } =
+        useRadar<D>({
+            data,
+            keys,
+            indexBy,
+            rotationDegrees,
+            width: innerWidth,
+            height: innerHeight,
+            colors,
+            defs,
+            fill,
+        })
 
     const layerById: Record<RadarLayerId, ReactNode> = {
         grid: null,

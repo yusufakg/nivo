@@ -1,7 +1,7 @@
-import { memo, SVGProps, useMemo } from 'react'
+import { useAnimatedPath, useMotionConfig, useTheme } from '@nivo/core'
+import { animated, to, useSpring } from '@react-spring/web'
 import { lineRadial } from 'd3-shape'
-import { animated, useSpring, to } from '@react-spring/web'
-import { useTheme, useAnimatedPath, useMotionConfig } from '@nivo/core'
+import { SVGProps, memo, useMemo } from 'react'
 import { RadarCommonProps } from './types'
 
 interface RadarGridLevelCircularProps {

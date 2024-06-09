@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
 import { Radar } from '@nivo/techradar'
+import type { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof Radar> = {
     title: 'Techradar',

@@ -1,19 +1,19 @@
-import { createElement, Fragment, ReactNode, useMemo } from 'react'
+import { InheritedColorConfig, OrdinalColorScaleConfig } from '@nivo/colors'
 import {
     // @ts-ignore
     bindDefs,
-    useDimensions,
     Container,
     SvgWrapper,
+    useDimensions,
 } from '@nivo/core'
-import { InheritedColorConfig, OrdinalColorScaleConfig } from '@nivo/colors'
-import { CirclePackingLayerId, CirclePackingSvgProps, ComputedDatum } from './types'
-import { useCirclePacking, useCirclePackingZoom, useCirclePackingLayerContext } from './hooks'
-import { defaultProps } from './props'
+import { createElement, Fragment, ReactNode, useMemo } from 'react'
 import { Circles } from './Circles'
 import { CircleSvg } from './CircleSvg'
+import { useCirclePacking, useCirclePackingLayerContext, useCirclePackingZoom } from './hooks'
 import { Labels } from './Labels'
 import { LabelSvg } from './LabelSvg'
+import { defaultProps } from './props'
+import { CirclePackingLayerId, CirclePackingSvgProps, ComputedDatum } from './types'
 
 type InnerCirclePackingProps<RawDatum> = Partial<
     Omit<

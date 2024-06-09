@@ -1,6 +1,6 @@
 import { ResponsiveWrapper } from '@nivo/core'
-import { RadarSvgProps } from './types'
 import { Radar } from './Radar'
+import { RadarSvgProps } from './types'
 
 export const ResponsiveRadar = <D extends Record<string, unknown>>(
     props: Omit<RadarSvgProps<D>, 'height' | 'width'>

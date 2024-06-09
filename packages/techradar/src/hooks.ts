@@ -1,18 +1,18 @@
-import { useMemo } from 'react'
-import { scaleLinear } from 'd3-scale'
+import { useOrdinalColorScale } from '@nivo/colors'
 import {
     // @ts-ignore
     bindDefs,
+    degreesToRadians,
     usePropertyAccessor,
 } from '@nivo/core'
-import { degreesToRadians } from '@nivo/core'
-import { useOrdinalColorScale } from '@nivo/colors'
+import { scaleLinear } from 'd3-scale'
+import { useMemo } from 'react'
 import { svgDefaultProps } from './props'
 import {
     RadarColorMapping,
     RadarCommonProps,
-    RadarDataProps,
     RadarCustomLayerProps,
+    RadarDataProps,
     RadarSvgProps,
 } from './types'
 
@@ -66,8 +66,7 @@ export const useRadar = <D extends Record<string, unknown>>({
 
     const { radius, radiusScale, centerX, centerY, angleStep } = useMemo(() => {
         const radius = Math.min(width, height) / 2
-        const radiusScale = scaleLinear<number, number>()
-            .range([0, radius])
+        const radiusScale = scaleLinear<number, number>().range([0, radius])
 
         return {
             radius,

@@ -1,15 +1,8 @@
-import { FunctionComponent, AriaAttributes } from 'react'
-import { AnimatedProps } from '@react-spring/web'
-import {
-    Box,
-    Theme,
-    Dimensions,
-    MotionProps,
-    PropertyAccessor,
-    SvgDefsAndFill,
-} from '@nivo/core'
 import { OrdinalColorScaleConfig } from '@nivo/colors'
+import { Box, Dimensions, MotionProps, PropertyAccessor, SvgDefsAndFill, Theme } from '@nivo/core'
+import { AnimatedProps } from '@react-spring/web'
 import { ScaleLinear } from 'd3-scale'
+import { AriaAttributes, FunctionComponent } from 'react'
 
 export interface RadarDataProps<D extends Record<string, unknown>> {
     data: D[]

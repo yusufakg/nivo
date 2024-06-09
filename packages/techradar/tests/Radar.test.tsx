@@ -1,7 +1,7 @@
 import { mount } from 'enzyme'
+import React from 'react'
 // @ts-ignore
 import { Radar, RadarSvgProps } from '../src'
-import React from 'react'
 
 type TestDatum = {
     A: number

@@ -18,7 +18,6 @@ const baseProps: RadarSvgProps<TestDatum> = {
         { A: 30, B: 10, category: 'third' },
     ],
     keys: ['A', 'B'],
-    indexBy: 'category',
     animate: false,
 }
 

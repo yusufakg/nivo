@@ -1,5 +1,5 @@
 import { OrdinalColorScaleConfig } from '@nivo/colors'
-import { Box, Dimensions, MotionProps, PropertyAccessor, SvgDefsAndFill, Theme } from '@nivo/core'
+import { Box, Dimensions, MotionProps, Theme } from '@nivo/core'
 import { AnimatedProps } from '@react-spring/web'
 import { ScaleLinear } from 'd3-scale'
 import { AriaAttributes, FunctionComponent } from 'react'
@@ -7,7 +7,6 @@ import { AriaAttributes, FunctionComponent } from 'react'
 export interface RadarDataProps<D extends Record<string, unknown>> {
     data: D[]
     keys: string[]
-    indexBy: PropertyAccessor<D, string>
 }
 
 export interface GridLabelProps {
@@ -63,14 +62,7 @@ export interface RadarCommonProps<D extends Record<string, unknown>> {
     ariaDescribedBy: AriaAttributes['aria-describedby']
 }
 
-export interface RadarSvgFillMatcherDatum<D extends Record<string, unknown>> {
-    color: string
-    data: RadarDataProps<D>['data']
-    key: string
-}
-
 export type RadarSvgProps<D extends Record<string, unknown>> = Partial<RadarCommonProps<D>> &
     RadarDataProps<D> &
     Dimensions &
-    MotionProps &
-    SvgDefsAndFill<RadarSvgFillMatcherDatum<D>>
+    MotionProps

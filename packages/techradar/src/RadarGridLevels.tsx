@@ -1,6 +1,6 @@
 import { useAnimatedPath, useMotionConfig, useTheme } from '@nivo/core'
 import { animated, to, useSpring } from '@react-spring/web'
-import { lineRadial } from 'd3-shape'
+import { curveLinearClosed, lineRadial } from 'd3-shape'
 import { SVGProps, memo, useMemo } from 'react'
 import { RadarCommonProps } from './types'
 
@@ -46,7 +46,8 @@ const RadarGridLevelLinear = ({
         () =>
             lineRadial<number>()
                 .angle(i => rotation + i * angleStep)
-                .radius(radius),
+                .radius(radius)
+                .curve(curveLinearClosed),
         [rotation, angleStep, radius]
     )
 

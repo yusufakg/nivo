@@ -1,5 +1,6 @@
 import { Radar } from '@nivo/techradar'
 import type { Meta, StoryObj } from '@storybook/react'
+import React from 'react'
 
 const meta: Meta<typeof Radar> = {
     title: 'Techradar',
@@ -27,7 +28,6 @@ const commonProperties = {
     height: 500,
     margin: { top: 60, right: 80, bottom: 30, left: 80 },
     ...generateSectors(),
-    indexBy: 'sector',
     animate: true,
 }
 

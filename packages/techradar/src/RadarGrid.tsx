@@ -2,13 +2,13 @@ import { positionFromAngle, useTheme } from '@nivo/core'
 import { SVGProps, useMemo } from 'react'
 import { RadarGridLabels } from './RadarGridLabels'
 import { RadarGridLevels } from './RadarGridLevels'
-import { GridLabelComponent, RadarCommonProps } from './types'
+import { GridLabelComponent, RadarCommonProps, RingIndex, SectorIndex } from './types'
 
 interface RadarGridProps {
-    indices: string[]
+    sectorIndices: SectorIndex[]
+    ringIndices: RingIndex[]
     shape: RadarCommonProps['gridShape']
     radius: number
-    levels: number
     rotation: number
     angleStep: number
     label: GridLabelComponent
@@ -16,8 +16,8 @@ interface RadarGridProps {
 }
 
 export const RadarGrid = ({
-    indices,
-    levels,
+    sectorIndices,
+    ringIndices,
     shape,
     radius,
     rotation,
@@ -28,17 +28,17 @@ export const RadarGrid = ({
     const theme = useTheme()
     const { radii, angles, labelAngles } = useMemo(() => {
         return {
-            radii: Array.from({ length: levels })
-                .map((_, i) => (radius / levels) * (i + 1))
+            radii: Array.from({ length: ringIndices.length })
+                .map((_, i) => (radius / ringIndices.length) * (i + 1))
                 .reverse(),
-            angles: Array.from({ length: indices.length }).map(
+            angles: Array.from({ length: sectorIndices.length }).map(
                 (_, i) => rotation + i * angleStep - Math.PI / 2
             ),
-            labelAngles: Array.from({ length: indices.length }).map(
+            labelAngles: Array.from({ length: sectorIndices.length }).map(
                 (_, i) => rotation + i * angleStep - Math.PI / 2 + angleStep / 2
             ),
         }
-    }, [indices, levels, radius, rotation, angleStep])
+    }, [sectorIndices, ringIndices, radius, rotation, angleStep])
 
     return (
         <>
@@ -62,13 +62,15 @@ export const RadarGrid = ({
                     radius={radius}
                     rotation={rotation}
                     angleStep={angleStep}
-                    dataLength={indices.length}
+                    dataLength={sectorIndices.length}
                 />
             ))}
             <RadarGridLabels
+                radii={radii}
                 radius={radius}
                 angles={labelAngles}
-                indices={indices}
+                sectorIndices={sectorIndices}
+                ringIndices={ringIndices}
                 labelOffset={labelOffset}
                 label={label}
             />

@@ -5,10 +5,16 @@ import { AriaAttributes, FunctionComponent } from 'react'
 
 export interface RadarDataProps {
     sectorData: string[]
+    ringData: string[]
 }
+
+export type SectorIndex = { index: string; data: string }
+
+export type RingIndex = { index: string; data: string }
 
 export interface GridLabelProps {
     id: string
+    name: string
     anchor: 'start' | 'middle' | 'end'
     angle: number
     x: number
@@ -30,7 +36,6 @@ export interface RadarCommonProps {
 
     margin: Box
 
-    gridLevels: number
     gridShape: 'circular' | 'linear'
     gridLabel: GridLabelComponent
     gridLabelOffset: number

@@ -4,9 +4,9 @@ import { RadarGridLabels } from './RadarGridLabels'
 import { RadarGridLevels } from './RadarGridLevels'
 import { GridLabelComponent, RadarCommonProps } from './types'
 
-interface RadarGridProps<D extends Record<string, unknown>> {
+interface RadarGridProps {
     indices: string[]
-    shape: RadarCommonProps<D>['gridShape']
+    shape: RadarCommonProps['gridShape']
     radius: number
     levels: number
     rotation: number
@@ -15,7 +15,7 @@ interface RadarGridProps<D extends Record<string, unknown>> {
     labelOffset: number
 }
 
-export const RadarGrid = <D extends Record<string, unknown>>({
+export const RadarGrid = ({
     indices,
     levels,
     shape,
@@ -24,7 +24,7 @@ export const RadarGrid = <D extends Record<string, unknown>>({
     angleStep,
     label,
     labelOffset,
-}: RadarGridProps<D>) => {
+}: RadarGridProps) => {
     const theme = useTheme()
     const { radii, angles, labelAngles } = useMemo(() => {
         return {
@@ -56,7 +56,7 @@ export const RadarGrid = <D extends Record<string, unknown>>({
                 )
             })}
             {radii.map((radius, i) => (
-                <RadarGridLevels<D>
+                <RadarGridLevels
                     key={`level.${i}`}
                     shape={shape}
                     radius={radius}

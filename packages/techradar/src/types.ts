@@ -1,12 +1,10 @@
 import { OrdinalColorScaleConfig } from '@nivo/colors'
 import { Box, Dimensions, MotionProps, Theme } from '@nivo/core'
 import { AnimatedProps } from '@react-spring/web'
-import { ScaleLinear } from 'd3-scale'
 import { AriaAttributes, FunctionComponent } from 'react'
 
-export interface RadarDataProps<D extends Record<string, unknown>> {
-    data: D[]
-    keys: string[]
+export interface RadarDataProps {
+    sectorData: string[]
 }
 
 export interface GridLabelProps {
@@ -21,28 +19,14 @@ export interface GridLabelProps {
 }
 export type GridLabelComponent = FunctionComponent<GridLabelProps>
 
-export interface RadarCustomLayerProps<D extends Record<string, unknown>> {
-    data: D[]
-    keys: string[]
-    indices: string[] | number[]
-    colorByKey: RadarColorMapping
-    centerX: number
-    centerY: number
-    radiusScale: ScaleLinear<number, number>
-    angleStep: number
-}
-export type RadarCustomLayer<D extends Record<string, unknown>> = FunctionComponent<
-    RadarCustomLayerProps<D>
->
-
 export type RadarLayerId = 'grid'
 
 export type RadarColorMapping = Record<string, string>
 
-export interface RadarCommonProps<D extends Record<string, unknown>> {
+export interface RadarCommonProps {
     rotation: number
 
-    layers: (RadarLayerId | RadarCustomLayer<D>)[]
+    layers: RadarLayerId[]
 
     margin: Box
 
@@ -62,7 +46,4 @@ export interface RadarCommonProps<D extends Record<string, unknown>> {
     ariaDescribedBy: AriaAttributes['aria-describedby']
 }
 
-export type RadarSvgProps<D extends Record<string, unknown>> = Partial<RadarCommonProps<D>> &
-    RadarDataProps<D> &
-    Dimensions &
-    MotionProps
+export type RadarSvgProps = Partial<RadarCommonProps> & RadarDataProps & Dimensions & MotionProps

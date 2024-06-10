@@ -7,7 +7,7 @@ export const RadarGridLabel = ({ id, anchor, animated: animatedProps }: GridLabe
 
     return (
         <animated.g transform={animatedProps.transform}>
-            <text style={theme.axis.ticks.text} dominantBaseline="central" textAnchor={anchor}>
+            <text id={id} style={theme.axis.ticks.text} dominantBaseline="central" textAnchor={anchor}>
                 {id}
             </text>
         </animated.g>

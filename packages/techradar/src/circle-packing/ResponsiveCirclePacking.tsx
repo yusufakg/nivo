@@ -1,4 +1,5 @@
 import { ResponsiveWrapper } from '@nivo/core'
+import React from 'react'
 import { CirclePacking } from './CirclePacking'
 import { CirclePackingSvgProps } from './types'
 

@@ -1,17 +1,17 @@
 import { InheritedColorConfig, OrdinalColorScaleConfig } from '@nivo/colors'
 import {
-    // @ts-ignore
-    bindDefs,
     Container,
     SvgWrapper,
+    // @ts-ignore
+    bindDefs,
     useDimensions,
 } from '@nivo/core'
-import { createElement, Fragment, ReactNode, useMemo } from 'react'
-import { Circles } from './Circles'
+import React, { Fragment, ReactNode, createElement, useMemo } from 'react'
 import { CircleSvg } from './CircleSvg'
-import { useCirclePacking, useCirclePackingLayerContext, useCirclePackingZoom } from './hooks'
-import { Labels } from './Labels'
+import { Circles } from './Circles'
 import { LabelSvg } from './LabelSvg'
+import { Labels } from './Labels'
+import { useCirclePacking, useCirclePackingLayerContext, useCirclePackingZoom } from './hooks'
 import { defaultProps } from './props'
 import { CirclePackingLayerId, CirclePackingSvgProps, ComputedDatum } from './types'
 

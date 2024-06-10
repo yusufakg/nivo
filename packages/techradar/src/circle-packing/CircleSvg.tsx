@@ -1,4 +1,5 @@
 import { animated } from '@react-spring/web'
+import React from 'react'
 import { useNodeMouseHandlers } from './hooks'
 import { CircleProps } from './types'
 

@@ -71,10 +71,7 @@ interface RadarGridLevelsProps {
     dataLength: number
 }
 
-export const RadarGridLevels = ({
-    shape,
-    ...props
-}: RadarGridLevelsProps) => {
+export const RadarGridLevels = ({ shape, ...props }: RadarGridLevelsProps) => {
     return shape === 'circular' ? (
         <RadarGridLevelCircular radius={props.radius} />
     ) : (

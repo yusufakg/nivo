@@ -1,26 +1,30 @@
-import {
-    degreesToRadians,
-} from '@nivo/core'
+import { degreesToRadians } from '@nivo/core'
 import { scaleLinear } from 'd3-scale'
 import { useMemo } from 'react'
-import {
-    RadarCommonProps,
-    RadarDataProps
-} from './types'
+import { RadarCommonProps, RadarDataProps } from './types'
 
 export const useRadar = ({
     sectorData,
+    ringData,
     rotationDegrees,
     width,
     height,
 }: {
     sectorData: RadarDataProps['sectorData']
+    ringData: RadarDataProps['ringData']
     rotationDegrees: RadarCommonProps['rotation']
     width: number
     height: number
     colors: RadarCommonProps['colors']
 }) => {
-    const indices = useMemo(() => sectorData.map((_, i) => `s${i.toString()}`), [sectorData])
+    const sectorIndices = useMemo(
+        () => sectorData.map((data, i) => ({ index: `s${i.toString()}`, data })),
+        [sectorData]
+    )
+    const ringIndices = useMemo(
+        () => ringData.map((data, i) => ({ index: `r${i.toString()}`, data })),
+        [ringData]
+    )
     const rotation = degreesToRadians(rotationDegrees)
 
     const { radius, radiusScale, centerX, centerY, angleStep } = useMemo(() => {
@@ -34,10 +38,11 @@ export const useRadar = ({
             centerY: height / 2,
             angleStep: (Math.PI * 2) / sectorData.length,
         }
-    }, [ sectorData, width, height])
+    }, [sectorData, width, height])
 
     return {
-        indices,
+        sectorIndices,
+        ringIndices,
         rotation,
         radius,
         radiusScale,

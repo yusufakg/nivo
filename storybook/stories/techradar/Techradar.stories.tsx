@@ -11,13 +11,16 @@ const meta: Meta<typeof Radar> = {
 export default meta
 type Story = StoryObj<typeof Radar>
 
-const sectors = ['s0', 's1', 's2', 's3']
+const sectors = ['sector1', 'sector2', 'sector3', 'sector4']
+
+const rings = ['ring1', 'ring2', 'ring3']
 
 const commonProperties = {
     width: 500,
     height: 500,
     margin: { top: 60, right: 80, bottom: 30, left: 80 },
     sectorData: sectors,
+    ringData: rings,
     animate: true,
 }
 

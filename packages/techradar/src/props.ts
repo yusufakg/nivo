@@ -6,7 +6,6 @@ export const svgDefaultProps = {
 
     rotation: 0,
 
-    gridLevels: 3,
     gridShape: 'circular' as const,
     gridLabelOffset: 16,
     gridLabel: RadarGridLabel,

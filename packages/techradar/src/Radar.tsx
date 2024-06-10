@@ -5,19 +5,16 @@ import { useRadar } from './hooks'
 import { svgDefaultProps } from './props'
 import { RadarLayerId, RadarSvgProps } from './types'
 
-type InnerRadarProps = Omit<
-    RadarSvgProps,
-    'animate' | 'motionConfig' | 'renderWrapper' | 'theme'
->
+type InnerRadarProps = Omit<RadarSvgProps, 'animate' | 'motionConfig' | 'renderWrapper' | 'theme'>
 
 const InnerRadar = ({
     sectorData,
+    ringData,
     layers = svgDefaultProps.layers,
     rotation: rotationDegrees = svgDefaultProps.rotation,
     margin: partialMargin,
     width,
     height,
-    gridLevels = svgDefaultProps.gridLevels,
     gridShape = svgDefaultProps.gridShape,
     gridLabel = svgDefaultProps.gridLabel,
     gridLabelOffset = svgDefaultProps.gridLabelOffset,
@@ -33,14 +30,14 @@ const InnerRadar = ({
         partialMargin
     )
 
-    const { indices, rotation, radius, centerX, centerY, angleStep } =
-        useRadar({
-            sectorData,
-            rotationDegrees,
-            width: innerWidth,
-            height: innerHeight,
-            colors,
-        })
+    const { sectorIndices, ringIndices, rotation, radius, centerX, centerY, angleStep } = useRadar({
+        sectorData,
+        ringData,
+        rotationDegrees,
+        width: innerWidth,
+        height: innerHeight,
+        colors,
+    })
 
     const layerById: Record<RadarLayerId, ReactNode> = {
         grid: null,
@@ -50,12 +47,12 @@ const InnerRadar = ({
         layerById.grid = (
             <g key="grid" transform={`translate(${centerX}, ${centerY})`}>
                 <RadarGrid
-                    levels={gridLevels}
                     shape={gridShape}
                     radius={radius}
                     rotation={rotation}
                     angleStep={angleStep}
-                    indices={indices}
+                    sectorIndices={sectorIndices}
+                    ringIndices={ringIndices}
                     label={gridLabel}
                     labelOffset={gridLabelOffset}
                 />
@@ -73,7 +70,7 @@ const InnerRadar = ({
             ariaLabelledBy={ariaLabelledBy}
             ariaDescribedBy={ariaDescribedBy}
         >
-            {layers.map((layer) => {
+            {layers.map(layer => {
                 return layerById?.[layer] ?? null
             })}
         </SvgWrapper>

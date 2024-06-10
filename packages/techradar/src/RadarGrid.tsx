@@ -26,13 +26,16 @@ export const RadarGrid = <D extends Record<string, unknown>>({
     labelOffset,
 }: RadarGridProps<D>) => {
     const theme = useTheme()
-    const { radii, angles } = useMemo(() => {
+    const { radii, angles, labelAngles } = useMemo(() => {
         return {
             radii: Array.from({ length: levels })
                 .map((_, i) => (radius / levels) * (i + 1))
                 .reverse(),
             angles: Array.from({ length: indices.length }).map(
                 (_, i) => rotation + i * angleStep - Math.PI / 2
+            ),
+            labelAngles: Array.from({ length: indices.length }).map(
+                (_, i) => rotation + i * angleStep - Math.PI / 2 + angleStep / 2
             ),
         }
     }, [indices, levels, radius, rotation, angleStep])
@@ -64,7 +67,7 @@ export const RadarGrid = <D extends Record<string, unknown>>({
             ))}
             <RadarGridLabels
                 radius={radius}
-                angles={angles}
+                angles={labelAngles}
                 indices={indices}
                 labelOffset={labelOffset}
                 label={label}

@@ -13,7 +13,6 @@ type InnerRadarProps<D extends Record<string, unknown>> = Omit<
 const InnerRadar = <D extends Record<string, unknown>>({
     data,
     keys,
-    indexBy,
     layers = svgDefaultProps.layers,
     rotation: rotationDegrees = svgDefaultProps.rotation,
     margin: partialMargin,
@@ -28,8 +27,6 @@ const InnerRadar = <D extends Record<string, unknown>>({
     ariaLabel,
     ariaLabelledBy,
     ariaDescribedBy,
-    defs = svgDefaultProps.defs,
-    fill = svgDefaultProps.fill,
 }: InnerRadarProps<D>) => {
     const { margin, innerWidth, innerHeight, outerWidth, outerHeight } = useDimensions(
         width,
@@ -37,17 +34,14 @@ const InnerRadar = <D extends Record<string, unknown>>({
         partialMargin
     )
 
-    const { indices, boundDefs, rotation, radius, centerX, centerY, angleStep, customLayerProps } =
+    const { indices, rotation, radius, centerX, centerY, angleStep, customLayerProps } =
         useRadar<D>({
             data,
             keys,
-            indexBy,
             rotationDegrees,
             width: innerWidth,
             height: innerHeight,
             colors,
-            defs,
-            fill,
         })
 
     const layerById: Record<RadarLayerId, ReactNode> = {
@@ -73,7 +67,6 @@ const InnerRadar = <D extends Record<string, unknown>>({
 
     return (
         <SvgWrapper
-            defs={boundDefs}
             width={outerWidth}
             height={outerHeight}
             margin={margin}

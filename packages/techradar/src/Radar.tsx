@@ -1,18 +1,17 @@
 import { Container, SvgWrapper, useDimensions } from '@nivo/core'
-import { Fragment, ReactNode, createElement } from 'react'
+import { ReactNode } from 'react'
 import { RadarGrid } from './RadarGrid'
 import { useRadar } from './hooks'
 import { svgDefaultProps } from './props'
 import { RadarLayerId, RadarSvgProps } from './types'
 
-type InnerRadarProps<D extends Record<string, unknown>> = Omit<
-    RadarSvgProps<D>,
+type InnerRadarProps = Omit<
+    RadarSvgProps,
     'animate' | 'motionConfig' | 'renderWrapper' | 'theme'
 >
 
-const InnerRadar = <D extends Record<string, unknown>>({
-    data,
-    keys,
+const InnerRadar = ({
+    sectorData,
     layers = svgDefaultProps.layers,
     rotation: rotationDegrees = svgDefaultProps.rotation,
     margin: partialMargin,
@@ -27,17 +26,16 @@ const InnerRadar = <D extends Record<string, unknown>>({
     ariaLabel,
     ariaLabelledBy,
     ariaDescribedBy,
-}: InnerRadarProps<D>) => {
+}: InnerRadarProps) => {
     const { margin, innerWidth, innerHeight, outerWidth, outerHeight } = useDimensions(
         width,
         height,
         partialMargin
     )
 
-    const { indices, rotation, radius, centerX, centerY, angleStep, customLayerProps } =
-        useRadar<D>({
-            data,
-            keys,
+    const { indices, rotation, radius, centerX, centerY, angleStep } =
+        useRadar({
+            sectorData,
             rotationDegrees,
             width: innerWidth,
             height: innerHeight,
@@ -51,7 +49,7 @@ const InnerRadar = <D extends Record<string, unknown>>({
     if (layers.includes('grid')) {
         layerById.grid = (
             <g key="grid" transform={`translate(${centerX}, ${centerY})`}>
-                <RadarGrid<D>
+                <RadarGrid
                     levels={gridLevels}
                     shape={gridShape}
                     radius={radius}
@@ -75,24 +73,20 @@ const InnerRadar = <D extends Record<string, unknown>>({
             ariaLabelledBy={ariaLabelledBy}
             ariaDescribedBy={ariaDescribedBy}
         >
-            {layers.map((layer, i) => {
-                if (typeof layer === 'function') {
-                    return <Fragment key={i}>{createElement(layer, customLayerProps)}</Fragment>
-                }
-
+            {layers.map((layer) => {
                 return layerById?.[layer] ?? null
             })}
         </SvgWrapper>
     )
 }
 
-export const Radar = <D extends Record<string, unknown>>({
+export const Radar = ({
     animate = svgDefaultProps.animate,
     motionConfig = svgDefaultProps.motionConfig,
     theme,
     renderWrapper,
     ...otherProps
-}: RadarSvgProps<D>) => (
+}: RadarSvgProps) => (
     <Container
         {...{
             animate,
@@ -101,6 +95,6 @@ export const Radar = <D extends Record<string, unknown>>({
             theme,
         }}
     >
-        <InnerRadar<D> {...otherProps} />
+        <InnerRadar {...otherProps} />
     </Container>
 )

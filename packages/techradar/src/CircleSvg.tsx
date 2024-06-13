@@ -1,7 +1,6 @@
 import { animated } from '@react-spring/web'
-import React from 'react'
-import { useNodeMouseHandlers } from './hooks'
-import { CircleProps } from './types'
+import { useNodeMouseHandlers } from './circle-packing/hooks'
+import { CircleProps } from './circle-packing/types'
 
 export const CircleSvg = <RawDatum,>({
     node,

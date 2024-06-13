@@ -15,12 +15,19 @@ const sectors = ['sector1', 'sector2', 'sector3', 'sector4']
 
 const rings = ['ring1', 'ring2', 'ring3']
 
+const blips = [
+    { sector: 's0', ring: 'r0', id: 'blip1' },
+    { sector: 's0', ring: 'r1', id: 'blip2' },
+    { sector: 's0', ring: 'r2', id: 'blip3' },
+]
+
 const commonProperties = {
     width: 500,
     height: 500,
     margin: { top: 60, right: 80, bottom: 30, left: 80 },
     sectorData: sectors,
     ringData: rings,
+    blipData: blips,
     animate: true,
 }
 

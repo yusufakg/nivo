@@ -1,21 +1,24 @@
 import { positionFromAngle, useTheme } from '@nivo/core'
-import { SVGProps, useMemo } from 'react'
+import { SVGProps } from 'react'
 import { RadarGridLabels } from './RadarGridLabels'
 import { RadarGridLevels } from './RadarGridLevels'
 import { GridLabelComponent, RadarCommonProps, RingIndex, SectorIndex } from './types'
 
-interface RadarGridProps {
+interface RadarGridProps<RawDatum> {
     sectorIndices: SectorIndex[]
     ringIndices: RingIndex[]
-    shape: RadarCommonProps['gridShape']
+    shape: RadarCommonProps<RawDatum>['gridShape']
     radius: number
     rotation: number
     angleStep: number
     label: GridLabelComponent
     labelOffset: number
+    radii: number[]
+    angles: number[]
+    labelAngles: number[]
 }
 
-export const RadarGrid = ({
+export const RadarGrid = <RawDatum,>({
     sectorIndices,
     ringIndices,
     shape,
@@ -24,21 +27,11 @@ export const RadarGrid = ({
     angleStep,
     label,
     labelOffset,
-}: RadarGridProps) => {
+    radii,
+    angles,
+    labelAngles,
+}: RadarGridProps<RawDatum>) => {
     const theme = useTheme()
-    const { radii, angles, labelAngles } = useMemo(() => {
-        return {
-            radii: Array.from({ length: ringIndices.length })
-                .map((_, i) => (radius / ringIndices.length) * (i + 1))
-                .reverse(),
-            angles: Array.from({ length: sectorIndices.length }).map(
-                (_, i) => rotation + i * angleStep - Math.PI / 2
-            ),
-            labelAngles: Array.from({ length: sectorIndices.length }).map(
-                (_, i) => rotation + i * angleStep - Math.PI / 2 + angleStep / 2
-            ),
-        }
-    }, [sectorIndices, ringIndices, radius, rotation, angleStep])
 
     return (
         <>

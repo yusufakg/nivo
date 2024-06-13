@@ -6,11 +6,11 @@ import {
     bindDefs,
     useDimensions,
 } from '@nivo/core'
-import React, { Fragment, ReactNode, createElement, useMemo } from 'react'
-import { CircleSvg } from './CircleSvg'
-import { Circles } from './Circles'
-import { LabelSvg } from './LabelSvg'
-import { Labels } from './Labels'
+import { Fragment, ReactNode, createElement, useMemo } from 'react'
+import { CircleSvg } from '../CircleSvg'
+import { Circles } from '../Circles'
+import { LabelSvg } from '../LabelSvg'
+import { Labels } from '../Labels'
 import { useCirclePacking, useCirclePackingLayerContext, useCirclePackingZoom } from './hooks'
 import { defaultProps } from './props'
 import { CirclePackingLayerId, CirclePackingSvgProps, ComputedDatum } from './types'

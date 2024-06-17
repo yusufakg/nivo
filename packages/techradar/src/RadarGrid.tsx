@@ -48,9 +48,9 @@ export const RadarGrid = <RawDatum,>({
                     />
                 )
             })}
-            {radii.map((radius, i) => (
+            {radii.slice(1).map((radius, i) => (
                 <RadarGridLevels
-                    key={`level.${i}`}
+                    key={`level.${i + 1}`}
                     shape={shape}
                     radius={radius}
                     rotation={rotation}

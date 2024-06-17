@@ -17,8 +17,14 @@ const rings = ['ring1', 'ring2', 'ring3']
 
 const blips = [
     { sector: 's0', ring: 'r0', id: 'blip1' },
+    { sector: 's0', ring: 'r0', id: 'blip4' },
+    { sector: 's0', ring: 'r0', id: 'blip5' },
+    { sector: 's0', ring: 'r1', id: 'blip6' },
     { sector: 's0', ring: 'r1', id: 'blip2' },
     { sector: 's0', ring: 'r2', id: 'blip3' },
+    { sector: 's1', ring: 'r0', id: 'blip7' },
+    { sector: 's2', ring: 'r1', id: 'blip8' },
+    { sector: 's3', ring: 'r2', id: 'blip9' },
 ]
 
 const commonProperties = {

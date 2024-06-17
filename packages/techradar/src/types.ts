@@ -99,7 +99,7 @@ export interface LabelProps<RawDatum> {
 export type LabelComponent<RawDatum> = (props: LabelProps<RawDatum>) => JSX.Element
 
 export interface CirclePackingCommonProps<RawDatum> {
-    blipData: RawDatum
+    blipData: RawDatum[]
     sector: PropertyAccessor<RawDatum, string>
     ring: PropertyAccessor<RawDatum, string>
     id: PropertyAccessor<RawDatum, string>
@@ -143,7 +143,7 @@ export interface RadarCommonProps<RawDatum> {
     ariaLabel: AriaAttributes['aria-label']
     ariaLabelledBy: AriaAttributes['aria-labelledby']
     ariaDescribedBy: AriaAttributes['aria-describedby']
-    blipData: RawDatum
+    blipData: RawDatum[]
     circlePackingProps: CirclePackingProps<RawDatum>
 }
 

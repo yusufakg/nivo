@@ -54,17 +54,28 @@ export const RadarGridLabels = ({
         }))
     )
 
-    const ringLabels = ringIndices.map((ring, i) => {
-        const position = positionFromAngle(0, radii[i] - 6)
+    const ringLabels = ringIndices
+        .map((ring, i) => {
+            if (i === 0) return null
 
-        return {
-            id: ring.index,
-            name: ring.data,
-            angle: 0,
-            anchor: 'end' as const,
-            ...position,
-        }
-    })
+            const position = positionFromAngle(0, radii[i] - 6)
+
+            return {
+                id: ring.index,
+                name: ring.data,
+                angle: 0,
+                anchor: 'end' as const,
+                ...position,
+            }
+        })
+        .filter(label => label !== null) as {
+        id: string
+        name: string
+        angle: number
+        anchor: 'start' | 'middle' | 'end'
+        x: number
+        y: number
+    }[]
 
     const ringSprings = useSprings(
         ringLabels.length,

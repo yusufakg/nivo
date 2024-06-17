@@ -66,9 +66,9 @@ const InnerRadar = <RawDatum,>({
 
     const { radii, angles, labelAngles } = useMemo(() => {
         return {
-            radii: Array.from({ length: ringIndices.length })
-                .map((_, i) => (radius / ringIndices.length) * (i + 1))
-                .reverse(),
+            radii: Array.from({ length: ringIndices.length }).map((_, i) =>
+                i === 0 ? 0 : (radius / (ringIndices.length - 1)) * i
+            ),
             angles: Array.from({ length: sectorIndices.length }).map(
                 (_, i) => rotation + i * angleStep - Math.PI / 2
             ),
@@ -83,6 +83,11 @@ const InnerRadar = <RawDatum,>({
         data: blipData,
         radii,
         angles,
+        centerX,
+        centerY,
+        ringData: ringIndices,
+        sectorData: sectorIndices,
+        gridShape,
     })
 
     // const zoomedNodes = useCirclePackingZoom<RawDatum>(

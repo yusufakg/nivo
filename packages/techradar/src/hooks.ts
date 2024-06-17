@@ -1,9 +1,7 @@
 import { useInheritedColor, useOrdinalColorScale } from '@nivo/colors'
 import { degreesToRadians, usePropertyAccessor, useTheme } from '@nivo/core'
-import { hierarchy as d3Hierarchy } from 'd3-hierarchy'
 import { scaleLinear } from 'd3-scale'
 import cloneDeep from 'lodash/cloneDeep'
-import sortBy from 'lodash/sortBy'
 import { MouseEvent, useMemo } from 'react'
 import {
     CirclePackingCommonProps,
@@ -31,10 +29,10 @@ export const useRadar = <RawDatum>({
         () => sectorData.map((data, i) => ({ index: `s${i.toString()}`, data })),
         [sectorData]
     )
-    const ringIndices = useMemo(
-        () => ringData.map((data, i) => ({ index: `r${i.toString()}`, data })),
-        [ringData]
-    )
+    const ringIndices = useMemo(() => {
+        const newData = ['r0', ...ringData]
+        return newData.map((data, i) => ({ index: `r${i.toString()}`, data }))
+    }, [ringData])
     const rotation = degreesToRadians(rotationDegrees)
 
     const { radius, radiusScale, centerX, centerY, angleStep } = useMemo(() => {
@@ -76,7 +74,33 @@ const polarToCartesian = (
 
 const calculateRadius = (outerRadius: number, padding: number) => {
     const innerRadius = outerRadius * padding
-    return (outerRadius - innerRadius) / 10
+    return (outerRadius - innerRadius) / 20
+}
+
+const calculateOverlapDistance = (x1: number, y1: number, x2: number, y2: number) => {
+    const distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+    return Math.max(0, 2 - distance)
+}
+
+const calculateElasticEnergy = (nodes: any[], containerRadius: number) => {
+    let totalEnergy = 0
+    nodes.forEach((node, i) => {
+        nodes.forEach((otherNode, j) => {
+            if (i !== j) {
+                const overlapDistance = calculateOverlapDistance(
+                    node.x,
+                    node.y,
+                    otherNode.x,
+                    otherNode.y
+                )
+                totalEnergy += overlapDistance ** 2
+            }
+        })
+        const distanceToCenter = Math.sqrt(node.x ** 2 + node.y ** 2)
+        const overlapToContainer = Math.max(0, distanceToCenter + 1 - containerRadius)
+        totalEnergy += overlapToContainer ** 2
+    })
+    return totalEnergy
 }
 
 export const useCirclePacking = <RawDatum>({
@@ -90,6 +114,11 @@ export const useCirclePacking = <RawDatum>({
     childColor,
     radii,
     angles,
+    centerX,
+    centerY,
+    sectorData,
+    ringData,
+    gridShape,
 }: {
     data: CirclePackingCommonProps<RawDatum>['blipData'] | undefined
     id: CirclePackingCommonProps<RawDatum>['id']
@@ -101,6 +130,11 @@ export const useCirclePacking = <RawDatum>({
     childColor: CirclePackingCommonProps<RawDatum>['childColor']
     radii: number[]
     angles: number[]
+    centerX: number
+    centerY: number
+    sectorData: any[]
+    ringData: any[]
+    gridShape: RadarCommonProps<RawDatum>['gridShape']
 }): ComputedDatum<RawDatum>[] => {
     if (!data) return []
 
@@ -113,51 +147,59 @@ export const useCirclePacking = <RawDatum>({
     const getChildColor = useInheritedColor<ComputedDatum<RawDatum>>(childColor, theme)
 
     const clonedData = cloneDeep(data)
-    const hierarchy = d3Hierarchy<RawDatum>(clonedData).sum(() => 1)
-    const nodes = leavesOnly ? hierarchy.leaves() : hierarchy.descendants()
+    const nodes: ComputedDatum<RawDatum>[] = clonedData.map(d => ({
+        data: d,
+        value: 1,
+        depth: 1,
+        height: 0,
+        parent: undefined,
+        id: getId(d),
+        path: [],
+        percentage: 0,
+        formattedValue: '',
+        x: 0,
+        y: 0,
+        radius: 0,
+        color: '',
+        fill: undefined,
+    }))
 
-    const sortedNodes = sortBy(nodes, 'depth')
-    const circleRadius = calculateRadius(Math.max(...radii), padding)
+    const computedNodesWithColors = nodes.map(descendant => {
+        const sectorIndex = sectorData.findIndex(sd => sd.index === (descendant.data as any).sector)
+        const ringIndex = ringData.findIndex(rd => rd.index === (descendant.data as any).ring)
 
-    const computedNodes = sortedNodes.map((descendant, index) => {
-        const id = getId(descendant.data)
-        const value = descendant.value!
-        const path = descendant.ancestors().map(ancestor => getId(ancestor.data))
-        const angleIndex = index % angles.length
-        const radiusIndex = Math.floor(index / angles.length) % radii.length
+        const startAngle = angles[sectorIndex]
+        const endAngle =
+            sectorIndex === sectorData.length - 1
+                ? angles[0] + 2 * Math.PI
+                : angles[(sectorIndex + 1) % angles.length]
+        const angle = startAngle + Math.random() * (endAngle - startAngle)
 
-        const pos = polarToCartesian(0, 0, radii[radiusIndex], degreesToRadians(angles[angleIndex]))
+        const startRadius = radii[ringIndex]
+        const endRadius = radii[ringIndex + 1]
+        const radius = startRadius + Math.random() * (endRadius - startRadius)
+        const pos = polarToCartesian(centerX, centerY, radius, angle)
         const x = pos.x
         const y = pos.y
 
-        const normalizedNode: ComputedDatum<RawDatum> = {
-            id,
-            path,
-            value,
-            percentage: 0,
-            formattedValue: `${value}`,
-            x,
-            y,
-            radius: circleRadius,
-            color: '',
-            data: descendant.data,
-            depth: descendant.depth,
-            height: descendant.height,
-        }
+        descendant.x = x
+        descendant.y = y
+        descendant.radius = calculateRadius(Math.max(...radii), padding)
+        descendant.color = getColor(descendant)
 
-        if (inheritColorFromParent && descendant.parent) {
-            const parentNode = computedNodes.find(
-                node => node.id === getId(descendant.parent!.data)
+        if (inheritColorFromParent && descendant.depth > 1) {
+            const parentNode = nodes.find(
+                node => node.id === getId((descendant as any).data.parent)
             )
-            normalizedNode.color = parentNode ? getChildColor(parentNode) : getColor(normalizedNode)
+            descendant.color = parentNode ? getChildColor(parentNode) : getColor(descendant)
         } else {
-            normalizedNode.color = getColor(normalizedNode)
+            descendant.color = getColor(descendant)
         }
 
-        return normalizedNode
+        return descendant
     })
 
-    return computedNodes
+    return computedNodesWithColors
 }
 
 export const useCirclePackingZoom = <RawDatum>(

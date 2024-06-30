@@ -31,7 +31,16 @@ const calculateEnergy = (nodes: ComputedDatum<any>[]) => {
     return energy
 }
 
-const simulatedAnnealing = (nodes: ComputedDatum<any>[], centerX: number, centerY: number, radii: number[], angles: number[], sectorData: any[], ringData: any[]) => {
+const simulatedAnnealing = (
+    nodes: ComputedDatum<any>[],
+    centerX: number,
+    centerY: number,
+    radii: number[],
+    angles: number[],
+    sectorData: any[],
+    ringData: any[],
+    blipRadius: number
+) => {
     const initialTemperature = 1000
     const coolingRate = 0.003
     let temperature = initialTemperature
@@ -50,11 +59,14 @@ const simulatedAnnealing = (nodes: ComputedDatum<any>[], centerX: number, center
         const ringIndex = ringData.findIndex(rd => rd.index === (randomNode.data as any).ring)
 
         const startAngle = angles[sectorIndex]
-        const endAngle = sectorIndex === sectorData.length - 1 ? angles[0] + 2 * Math.PI : angles[(sectorIndex + 1) % angles.length]
+        const endAngle =
+            sectorIndex === sectorData.length - 1
+                ? angles[0] + 2 * Math.PI
+                : angles[(sectorIndex + 1) % angles.length]
         const angle = startAngle + Math.random() * (endAngle - startAngle)
 
-        const startRadius = radii[ringIndex]
-        const endRadius = radii[ringIndex + 1]
+        const startRadius = radii[ringIndex] + blipRadius
+        const endRadius = radii[ringIndex + 1] - blipRadius
         const radius = startRadius + Math.random() * (endRadius - startRadius)
         const pos = polarToCartesian(centerX, centerY, radius, angle)
 
@@ -122,6 +134,7 @@ export const useCirclePacking = <RawDatum>({
     const theme = useTheme()
     const getChildColor = useInheritedColor<ComputedDatum<RawDatum>>(childColor, theme)
 
+    const blipRadius = Math.max(...radii) / 20
     const clonedData = cloneDeep(data)
     const nodes: ComputedDatum<RawDatum>[] = clonedData.map(d => ({
         data: d,
@@ -149,18 +162,16 @@ export const useCirclePacking = <RawDatum>({
             sectorIndex === sectorData.length - 1
                 ? angles[0] + 2 * Math.PI
                 : angles[(sectorIndex + 1) % angles.length]
-        const angle = startAngle + Math.random() * (endAngle - startAngle)
+        const positionAngle = startAngle + Math.random() * (endAngle - startAngle)
 
-        const startRadius = radii[ringIndex]
-        const endRadius = radii[ringIndex + 1]
-        const radius = startRadius + Math.random() * (endRadius - startRadius)
-        const pos = polarToCartesian(centerX, centerY, radius, angle)
-        const x = pos.x
-        const y = pos.y
+        const startRadius = radii[ringIndex] + blipRadius
+        const endRadius = radii[ringIndex + 1] - blipRadius
+        const positionRadius = startRadius + Math.random() * (endRadius - startRadius)
+        const pos = polarToCartesian(centerX, centerY, positionRadius, positionAngle)
 
-        descendant.x = x
-        descendant.y = y
-        descendant.radius = Math.max(...radii) / 20
+        descendant.x = pos.x
+        descendant.y = pos.y
+        descendant.radius = blipRadius
         descendant.color = getColor(descendant)
 
         if (inheritColorFromParent && descendant.depth > 1) {
@@ -175,11 +186,19 @@ export const useCirclePacking = <RawDatum>({
         return descendant
     })
 
-    const packedNodes = simulatedAnnealing(initialNodesWithColors, centerX, centerY, radii, angles, sectorData, ringData)
+    const packedNodes = simulatedAnnealing(
+        initialNodesWithColors,
+        centerX,
+        centerY,
+        radii,
+        angles,
+        sectorData,
+        ringData,
+        blipRadius
+    )
 
     return packedNodes
 }
-
 
 // export const useCirclePackingZoom = <RawDatum>(
 //     nodes: ComputedDatum<RawDatum>[],

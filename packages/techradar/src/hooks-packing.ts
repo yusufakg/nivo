@@ -31,6 +31,75 @@ const calculateEnergy = (nodes: ComputedDatum<any>[]) => {
     return energy
 }
 
+const getValidPosition = (
+    radii: number[],
+    angles: number[],
+    sectorData: any[],
+    ringData: any[],
+    blipRadius: number,
+    randomNode: ComputedDatum<any>
+) => {
+    const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
+    const getRandomRadius = (start: number, end: number) => start + Math.random() * (end - start)
+    const getSectorAngles = (
+        angles: number[],
+        sectorIndex: number,
+        sectorDataLength: number,
+        blipRadius: number,
+        positionRadiusBlip: number
+    ) => {
+        const deltaTheta = Math.asin(blipRadius / positionRadiusBlip)
+        const startAngle = angles[sectorIndex] + deltaTheta
+        const endAngle =
+            (sectorIndex === sectorDataLength - 1
+                ? angles[0] + 2 * Math.PI
+                : angles[(sectorIndex + 1) % angles.length]) - deltaTheta
+        return { startAngle, endAngle }
+    }
+
+    const ringIndex = ringData.findIndex(rd => rd.index === randomNode.data.ring)
+    const startRadiusSector = radii[ringIndex] + blipRadius
+    const endRadiusSector = radii[ringIndex + 1] - blipRadius
+
+    let positionRadiusBlip = getRandomRadius(startRadiusSector, endRadiusSector)
+    let positionAngleBlip: number
+
+    if (sectorData.length === 0) {
+        positionAngleBlip = Math.random() * 2 * Math.PI
+    } else if (sectorData.length === 1) {
+        const { startAngle, endAngle } = getSectorAngles(
+            angles,
+            0,
+            sectorData.length,
+            blipRadius,
+            positionRadiusBlip
+        )
+        positionAngleBlip = clamp(getRandomRadius(startAngle, endAngle), startAngle, endAngle)
+        positionRadiusBlip = clamp(positionRadiusBlip, startRadiusSector, endRadiusSector)
+    } else {
+        const sectorIndex = sectorData.findIndex(sd => sd.index === randomNode.data.sector)
+        const sectorAngleSpan =
+            sectorIndex === sectorData.length - 1
+                ? angles[0] + 2 * Math.PI - angles[sectorIndex]
+                : angles[(sectorIndex + 1) % angles.length] - angles[sectorIndex]
+        const minStartRadiusSector = blipRadius / Math.sin(sectorAngleSpan / 2)
+        const adjustedStartRadiusSector = Math.max(minStartRadiusSector, startRadiusSector)
+
+        positionRadiusBlip = getRandomRadius(adjustedStartRadiusSector, endRadiusSector)
+        const { startAngle, endAngle } = getSectorAngles(
+            angles,
+            sectorIndex,
+            sectorData.length,
+            blipRadius,
+            positionRadiusBlip
+        )
+        positionAngleBlip = clamp(getRandomRadius(startAngle, endAngle), startAngle, endAngle)
+        positionRadiusBlip = clamp(positionRadiusBlip, adjustedStartRadiusSector, endRadiusSector)
+    }
+
+    return { positionRadiusBlip, positionAngleBlip }
+}
+
 const simulatedAnnealing = (
     nodes: ComputedDatum<any>[],
     centerX: number,
@@ -55,20 +124,16 @@ const simulatedAnnealing = (
         const randomNodeIndex = Math.floor(Math.random() * newSolution.length)
         const randomNode = newSolution[randomNodeIndex]
 
-        const sectorIndex = sectorData.findIndex(sd => sd.index === (randomNode.data as any).sector)
-        const ringIndex = ringData.findIndex(rd => rd.index === (randomNode.data as any).ring)
+        const { positionRadiusBlip, positionAngleBlip } = getValidPosition(
+            radii,
+            angles,
+            sectorData,
+            ringData,
+            blipRadius,
+            randomNode
+        )
 
-        const startAngle = angles[sectorIndex]
-        const endAngle =
-            sectorIndex === sectorData.length - 1
-                ? angles[0] + 2 * Math.PI
-                : angles[(sectorIndex + 1) % angles.length]
-        const angle = startAngle + Math.random() * (endAngle - startAngle)
-
-        const startRadius = radii[ringIndex] + blipRadius
-        const endRadius = radii[ringIndex + 1] - blipRadius
-        const radius = startRadius + Math.random() * (endRadius - startRadius)
-        const pos = polarToCartesian(centerX, centerY, radius, angle)
+        const pos = polarToCartesian(centerX, centerY, positionRadiusBlip, positionAngleBlip)
 
         randomNode.x = pos.x
         randomNode.y = pos.y
@@ -154,20 +219,16 @@ export const useCirclePacking = <RawDatum>({
     }))
 
     const initialNodesWithColors = nodes.map(descendant => {
-        const sectorIndex = sectorData.findIndex(sd => sd.index === (descendant.data as any).sector)
-        const ringIndex = ringData.findIndex(rd => rd.index === (descendant.data as any).ring)
+        const { positionRadiusBlip, positionAngleBlip } = getValidPosition(
+            radii,
+            angles,
+            sectorData,
+            ringData,
+            blipRadius,
+            descendant
+        )
 
-        const startAngle = angles[sectorIndex]
-        const endAngle =
-            sectorIndex === sectorData.length - 1
-                ? angles[0] + 2 * Math.PI
-                : angles[(sectorIndex + 1) % angles.length]
-        const positionAngle = startAngle + Math.random() * (endAngle - startAngle)
-
-        const startRadius = radii[ringIndex] + blipRadius
-        const endRadius = radii[ringIndex + 1] - blipRadius
-        const positionRadius = startRadius + Math.random() * (endRadius - startRadius)
-        const pos = polarToCartesian(centerX, centerY, positionRadius, positionAngle)
+        const pos = polarToCartesian(centerX, centerY, positionRadiusBlip, positionAngleBlip)
 
         descendant.x = pos.x
         descendant.y = pos.y

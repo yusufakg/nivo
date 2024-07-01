@@ -23,7 +23,7 @@ export const svgDefaultProps = {
         id: 'id',
         sector: 'sector',
         ring: 'ring',
-        padding: 0,
+        padding: 1,
         leavesOnly: false,
         colorBy: 'depth' as const,
         inheritColorFromParent: false,

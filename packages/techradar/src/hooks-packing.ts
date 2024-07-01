@@ -1,8 +1,9 @@
 import { useInheritedColor, useOrdinalColorScale } from '@nivo/colors'
 import { usePropertyAccessor, useTheme } from '@nivo/core'
 import cloneDeep from 'lodash/cloneDeep'
+import { MouseEvent, useMemo } from 'react'
 import { getValidPosition, polarToCartesian, simulatedAnnealing } from './hooks-fns'
-import { CirclePackingCommonProps, ComputedDatum, RadarCommonProps } from './types'
+import { CirclePackingCommonProps, ComputedDatum, MouseHandlers, RadarCommonProps } from './types'
 
 export const useCirclePacking = <RawDatum>({
     data,
@@ -109,96 +110,97 @@ export const useCirclePacking = <RawDatum>({
     return packedNodes
 }
 
-// export const useCirclePackingZoom = <RawDatum>(
-//     nodes: ComputedDatum<RawDatum>[],
-//     zoomedId: CirclePackingCommonProps<RawDatum>['zoomedId'],
-//     width: number,
-//     height: number
-// ) =>
-//     useMemo(() => {
-//         if (!zoomedId) return nodes
+// not tested
+export const useCirclePackingZoom = <RawDatum>(
+    nodes: ComputedDatum<RawDatum>[],
+    zoomedId: CirclePackingCommonProps<RawDatum>['zoomedId'],
+    width: number,
+    height: number
+) =>
+    useMemo(() => {
+        if (!zoomedId) return nodes
 
-//         const zoomedNode = nodes.find(({ id }) => id === zoomedId)
-//         if (!zoomedNode) return nodes
+        const zoomedNode = nodes.find(({ id }) => id === zoomedId)
+        if (!zoomedNode) return nodes
 
-//         const ratio = Math.min(width, height) / (zoomedNode.radius * 2)
-//         const offsetX = width / 2 - zoomedNode.x * ratio
-//         const offsetY = height / 2 - zoomedNode.y * ratio
+        const ratio = Math.min(width, height) / (zoomedNode.radius * 2)
+        const offsetX = width / 2 - zoomedNode.x * ratio
+        const offsetY = height / 2 - zoomedNode.y * ratio
 
-//         return nodes.map(node => ({
-//             ...node,
-//             x: node.x * ratio + offsetX,
-//             y: node.y * ratio + offsetY,
-//             radius: node.radius * ratio,
-//         }))
-//     }, [nodes, zoomedId, width, height])
+        return nodes.map(node => ({
+            ...node,
+            x: node.x * ratio + offsetX,
+            y: node.y * ratio + offsetY,
+            radius: node.radius * ratio,
+        }))
+    }, [nodes, zoomedId, width, height])
 
-// export const useCirclePackingLabels = <RawDatum>({
-//     nodes,
-//     label,
-//     filter,
-//     skipRadius,
-//     textColor,
-// }: {
-//     nodes: ComputedDatum<RawDatum>[]
-//     label: CirclePackingCommonProps<RawDatum>['label']
-//     filter: CirclePackingCommonProps<RawDatum>['labelsFilter']
-//     skipRadius: CirclePackingCommonProps<RawDatum>['labelsSkipRadius']
-//     textColor: CirclePackingCommonProps<RawDatum>['labelTextColor']
-// }) => {
-//     const getLabel = usePropertyAccessor<ComputedDatum<RawDatum>, string | number>(label)
-//     const theme = useTheme()
-//     const getTextColor = useInheritedColor<ComputedDatum<RawDatum>>(textColor, theme)
+// not tested
+export const useCirclePackingLabels = <RawDatum>({
+    nodes,
+    label,
+    filter,
+    skipRadius,
+    textColor,
+}: {
+    nodes: ComputedDatum<RawDatum>[]
+    label: CirclePackingCommonProps<RawDatum>['label']
+    filter: CirclePackingCommonProps<RawDatum>['labelsFilter']
+    skipRadius: CirclePackingCommonProps<RawDatum>['labelsSkipRadius']
+    textColor: CirclePackingCommonProps<RawDatum>['labelTextColor']
+}) => {
+    const getLabel = usePropertyAccessor<ComputedDatum<RawDatum>, string | number>(label)
+    const theme = useTheme()
+    const getTextColor = useInheritedColor<ComputedDatum<RawDatum>>(textColor, theme)
 
-//     // computing the labels
-//     const labels = useMemo(
-//         () =>
-//             nodes
-//                 .filter(node => node.radius >= skipRadius)
-//                 .map(node => ({
-//                     label: getLabel(node),
-//                     textColor: getTextColor(node),
-//                     node,
-//                 })),
-//         [nodes, skipRadius, getLabel, getTextColor]
-//     )
+    const labels = useMemo(
+        () =>
+            nodes
+                .filter(node => node.radius >= skipRadius)
+                .map(node => ({
+                    label: getLabel(node),
+                    textColor: getTextColor(node),
+                    node,
+                })),
+        [nodes, skipRadius, getLabel, getTextColor]
+    )
 
-//     // apply extra filtering if provided
-//     return useMemo(() => {
-//         if (!filter) return labels
+    return useMemo(() => {
+        if (!filter) return labels
 
-//         return labels.filter(filter)
-//     }, [labels, filter])
-// }
+        return labels.filter(filter)
+    }, [labels, filter])
+}
 
-// export const useNodeMouseHandlers = <RawDatum>(
-//     node: ComputedDatum<RawDatum>,
-//     { onMouseEnter, onMouseMove, onMouseLeave, onClick }: MouseHandlers<RawDatum>
-// ): Partial<
-//     Record<'onMouseEnter' | 'onMouseMove' | 'onMouseLeave' | 'onClick', (event: MouseEvent) => void>
-// > =>
-//     useMemo(
-//         () => ({
-//             onMouseEnter: onMouseEnter
-//                 ? (event: MouseEvent) => {
-//                       onMouseEnter(node, event)
-//                   }
-//                 : undefined,
-//             onMouseMove: onMouseMove
-//                 ? (event: MouseEvent) => {
-//                       onMouseMove(node, event)
-//                   }
-//                 : undefined,
-//             onMouseLeave: onMouseLeave
-//                 ? (event: MouseEvent) => {
-//                       onMouseLeave(node, event)
-//                   }
-//                 : undefined,
-//             onClick: onClick
-//                 ? (event: MouseEvent) => {
-//                       onClick(node, event)
-//                   }
-//                 : undefined,
-//         }),
-//         [node, onMouseEnter, onMouseMove, onMouseLeave, onClick]
-//     )
+// not tested
+export const useNodeMouseHandlers = <RawDatum>(
+    node: ComputedDatum<RawDatum>,
+    { onMouseEnter, onMouseMove, onMouseLeave, onClick }: MouseHandlers<RawDatum>
+): Partial<
+    Record<'onMouseEnter' | 'onMouseMove' | 'onMouseLeave' | 'onClick', (event: MouseEvent) => void>
+> =>
+    useMemo(
+        () => ({
+            onMouseEnter: onMouseEnter
+                ? (event: MouseEvent) => {
+                      onMouseEnter(node, event)
+                  }
+                : undefined,
+            onMouseMove: onMouseMove
+                ? (event: MouseEvent) => {
+                      onMouseMove(node, event)
+                  }
+                : undefined,
+            onMouseLeave: onMouseLeave
+                ? (event: MouseEvent) => {
+                      onMouseLeave(node, event)
+                  }
+                : undefined,
+            onClick: onClick
+                ? (event: MouseEvent) => {
+                      onClick(node, event)
+                  }
+                : undefined,
+        }),
+        [node, onMouseEnter, onMouseMove, onMouseLeave, onClick]
+    )

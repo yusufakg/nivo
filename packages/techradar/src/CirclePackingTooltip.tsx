@@ -1,5 +1,5 @@
 import { BasicTooltip } from '@nivo/tooltip'
-import { ComputedDatum } from './circle-packing/types'
+import { ComputedDatum } from './types'
 
 export const CirclePackingTooltip = <RawDatum,>({
     id,

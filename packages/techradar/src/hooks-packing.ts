@@ -9,7 +9,6 @@ export const useCirclePacking = <RawDatum>({
     data,
     id,
     padding,
-    leavesOnly,
     colors,
     colorBy,
     inheritColorFromParent,
@@ -20,7 +19,8 @@ export const useCirclePacking = <RawDatum>({
     centerY,
     sectorData,
     ringData,
-    gridShape,
+    // leavesOnly, TODO: not now
+    // gridShape, TODO: not now
 }: {
     data: CirclePackingCommonProps<RawDatum>['blipData'] | undefined
     id: CirclePackingCommonProps<RawDatum>['id']
@@ -73,7 +73,7 @@ export const useCirclePacking = <RawDatum>({
             angles,
             sectorData,
             ringData,
-            blipRadius,
+            blipRadius + padding,
             descendant
         )
 
@@ -104,13 +104,13 @@ export const useCirclePacking = <RawDatum>({
         angles,
         sectorData,
         ringData,
-        blipRadius
+        blipRadius + padding
     )
 
     return packedNodes
 }
 
-// not tested
+// TODO: not tested
 export const useCirclePackingZoom = <RawDatum>(
     nodes: ComputedDatum<RawDatum>[],
     zoomedId: CirclePackingCommonProps<RawDatum>['zoomedId'],
@@ -135,7 +135,7 @@ export const useCirclePackingZoom = <RawDatum>(
         }))
     }, [nodes, zoomedId, width, height])
 
-// not tested
+// TODO: not tested
 export const useCirclePackingLabels = <RawDatum>({
     nodes,
     label,
@@ -172,7 +172,7 @@ export const useCirclePackingLabels = <RawDatum>({
     }, [labels, filter])
 }
 
-// not tested
+// TODO: not tested
 export const useNodeMouseHandlers = <RawDatum>(
     node: ComputedDatum<RawDatum>,
     { onMouseEnter, onMouseMove, onMouseLeave, onClick }: MouseHandlers<RawDatum>

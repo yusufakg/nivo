@@ -13,16 +13,17 @@ export const polarToCartesian = (
     }
 }
 
-export const calculateEnergy = (nodes: ComputedDatum<any>[]) => {
+export const calculateEnergy = (nodes: ComputedDatum<any>[], blipRadius: number) => {
     let energy = 0
+    const penaltyFactor = 1000
     for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
             const dx = nodes[i].x - nodes[j].x
             const dy = nodes[i].y - nodes[j].y
             const distance = Math.sqrt(dx * dx + dy * dy)
-            const minDistance = nodes[i].radius + nodes[j].radius
+            const minDistance = blipRadius * 2
             if (distance < minDistance) {
-                energy += minDistance - distance
+                energy += penaltyFactor * (minDistance - distance)
             }
         }
     }
@@ -113,7 +114,7 @@ export const simulatedAnnealing = (
     let temperature = initialTemperature
 
     let currentSolution = cloneDeep(nodes)
-    let currentEnergy = calculateEnergy(currentSolution)
+    let currentEnergy = calculateEnergy(currentSolution, blipRadius)
     let bestSolution = cloneDeep(currentSolution)
     let bestEnergy = currentEnergy
 
@@ -136,7 +137,7 @@ export const simulatedAnnealing = (
         randomNode.x = pos.x
         randomNode.y = pos.y
 
-        const newEnergy = calculateEnergy(newSolution)
+        const newEnergy = calculateEnergy(newSolution, blipRadius)
         const energyDifference = newEnergy - currentEnergy
 
         if (energyDifference < 0 || Math.exp(-energyDifference / temperature) > Math.random()) {

@@ -19,8 +19,8 @@ export const useCirclePacking = <RawDatum>({
     centerY,
     sectorData,
     ringData,
-    // leavesOnly, TODO: not now
-    // gridShape, TODO: not now
+    // TODO: (suggestion) allow calculation of linear gridShape
+    // gridShape,
 }: {
     data: CirclePackingCommonProps<RawDatum>['blipData'] | undefined
     id: CirclePackingCommonProps<RawDatum>['id']
@@ -34,8 +34,8 @@ export const useCirclePacking = <RawDatum>({
     angles: number[]
     centerX: number
     centerY: number
-    sectorData: any[]
-    ringData: any[]
+    sectorData: { index: string; data: string; }[]
+    ringData: { index: string; data: string; }[]
     gridShape: RadarCommonProps<RawDatum>['gridShape']
 }): ComputedDatum<RawDatum>[] => {
     if (!data) return []
@@ -110,7 +110,7 @@ export const useCirclePacking = <RawDatum>({
     return packedNodes
 }
 
-// TODO: not tested
+// TODO: for the (suggestion) in Techradar.tsx
 export const useCirclePackingZoom = <RawDatum>(
     nodes: ComputedDatum<RawDatum>[],
     zoomedId: CirclePackingCommonProps<RawDatum>['zoomedId'],
@@ -135,7 +135,7 @@ export const useCirclePackingZoom = <RawDatum>(
         }))
     }, [nodes, zoomedId, width, height])
 
-// TODO: not tested
+// TODO: for the (suggestion) in Techradar.tsx
 export const useCirclePackingLabels = <RawDatum>({
     nodes,
     label,
@@ -172,7 +172,7 @@ export const useCirclePackingLabels = <RawDatum>({
     }, [labels, filter])
 }
 
-// TODO: not tested
+// TODO: handlers caused some performance issues, needs to be optimized
 export const useNodeMouseHandlers = <RawDatum>(
     node: ComputedDatum<RawDatum>,
     { onMouseEnter, onMouseMove, onMouseLeave, onClick }: MouseHandlers<RawDatum>

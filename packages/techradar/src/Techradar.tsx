@@ -91,6 +91,7 @@ const InnerRadar = <RawDatum,>({
         gridShape,
     })
 
+    // TODO: (suggestion) zooming into a blip and use of d3-hierarchy pack
     // const zoomedNodes = useCirclePackingZoom<RawDatum>(
     //     nodes,
     //     circlePackingProps.zoomedId,

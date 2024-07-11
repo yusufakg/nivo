@@ -1,5 +1,5 @@
 import { ResponsiveWrapper } from '@nivo/core'
-import { Radar } from './Radar'
+import { Radar } from './Techradar'
 import { RadarSvgProps } from './types'
 
 export const ResponsiveRadar = <RawDatum,>(

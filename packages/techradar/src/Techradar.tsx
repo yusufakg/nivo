@@ -86,8 +86,8 @@ const InnerRadar = <RawDatum,>({
         angles,
         centerX,
         centerY,
-        ringData: ringIndices,
-        sectorData: sectorIndices,
+        ringIndices,
+        sectorIndices,
         gridShape,
     })
 

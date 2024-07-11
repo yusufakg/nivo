@@ -17,8 +17,8 @@ export const useCirclePacking = <RawDatum>({
     angles,
     centerX,
     centerY,
-    sectorData,
-    ringData,
+    sectorIndices,
+    ringIndices,
     // TODO: (suggestion) allow calculation of linear gridShape
     // gridShape,
 }: {
@@ -34,8 +34,8 @@ export const useCirclePacking = <RawDatum>({
     angles: number[]
     centerX: number
     centerY: number
-    sectorData: { index: string; data: string; }[]
-    ringData: { index: string; data: string; }[]
+    sectorIndices: { index: string; data: string; }[]
+    ringIndices: { index: string; data: string; }[]
     gridShape: RadarCommonProps<RawDatum>['gridShape']
 }): ComputedDatum<RawDatum>[] => {
     if (!data) return []
@@ -71,8 +71,8 @@ export const useCirclePacking = <RawDatum>({
         const { positionRadiusBlip, positionAngleBlip } = getValidPosition(
             radii,
             angles,
-            sectorData,
-            ringData,
+            sectorIndices,
+            ringIndices,
             blipRadius + padding,
             descendant
         )
@@ -102,8 +102,8 @@ export const useCirclePacking = <RawDatum>({
         centerY,
         radii,
         angles,
-        sectorData,
-        ringData,
+        sectorIndices,
+        ringIndices,
         blipRadius + padding
     )
 

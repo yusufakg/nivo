@@ -1,11 +1,11 @@
 import { ResponsiveWrapper } from '@nivo/core'
-import { Radar } from './Techradar'
+import { Techradar } from './Techradar'
 import { RadarSvgProps } from './types'
 
-export const ResponsiveRadar = <RawDatum,>(
+export const ResponsiveTechradar = <RawDatum,>(
     props: Omit<RadarSvgProps<RawDatum>, 'height' | 'width'>
 ) => (
     <ResponsiveWrapper>
-        {({ width, height }) => <Radar<RawDatum> width={width} height={height} {...props} />}
+        {({ width, height }) => <Techradar<RawDatum> width={width} height={height} {...props} />}
     </ResponsiveWrapper>
 )

@@ -1,5 +1,5 @@
 export * from './props'
-export * from './ResponsiveRadar'
+export * from './ResponsiveTechradar'
 export * from './Techradar'
 export * from './types'
 

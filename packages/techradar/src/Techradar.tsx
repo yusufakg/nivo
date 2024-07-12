@@ -174,7 +174,7 @@ const InnerRadar = <RawDatum,>({
     )
 }
 
-export const Radar = <RawDatum,>({
+export const Techradar = <RawDatum,>({
     animate = svgDefaultProps.animate,
     motionConfig = svgDefaultProps.motionConfig,
     theme,

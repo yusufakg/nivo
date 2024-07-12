@@ -5,6 +5,8 @@ import { MouseEvent, useMemo } from 'react'
 import { getValidPosition, polarToCartesian, simulatedAnnealing } from './hooks-fns'
 import { CirclePackingCommonProps, ComputedDatum, MouseHandlers, RadarCommonProps } from './types'
 
+// TODO: (suggestion) allow calculation of linear gridShape
+// gridShape,
 export const useCirclePacking = <RawDatum>({
     data,
     id,
@@ -19,8 +21,6 @@ export const useCirclePacking = <RawDatum>({
     centerY,
     sectorIndices,
     ringIndices,
-    // TODO: (suggestion) allow calculation of linear gridShape
-    // gridShape,
 }: {
     data: CirclePackingCommonProps<RawDatum>['blipData'] | undefined
     id: CirclePackingCommonProps<RawDatum>['id']
@@ -34,11 +34,12 @@ export const useCirclePacking = <RawDatum>({
     angles: number[]
     centerX: number
     centerY: number
-    sectorIndices: { index: string; data: string; }[]
-    ringIndices: { index: string; data: string; }[]
+    sectorIndices: { index: string; data: string }[]
+    ringIndices: { index: string; data: string }[]
     gridShape: RadarCommonProps<RawDatum>['gridShape']
 }): ComputedDatum<RawDatum>[] => {
-    if (!data) return []
+    console.log('useCirclePacking', data)
+    if (!data || data.length === 0) return []
 
     const getId = usePropertyAccessor<RawDatum, string>(id)
     const getColor = useOrdinalColorScale<Omit<ComputedDatum<RawDatum>, 'color' | 'fill'>>(

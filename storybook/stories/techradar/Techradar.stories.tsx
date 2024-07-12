@@ -1,15 +1,15 @@
-import { Radar } from '@nivo/techradar'
+import { Techradar } from '@nivo/techradar'
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
-const meta: Meta<typeof Radar> = {
+const meta: Meta<typeof Techradar> = {
     title: 'Techradar',
-    component: Radar,
+    component: Techradar,
     tags: ['autodocs'],
 }
 
 export default meta
-type Story = StoryObj<typeof Radar>
+type Story = StoryObj<typeof Techradar>
 
 const sectors = ['sector1', 'sector2', 'sector3', 'sector4']
 
@@ -48,4 +48,4 @@ const commonProperties = {
     animate: true,
 }
 
-export const Basic: Story = { render: args => <Radar {...commonProperties} /> }
+export const Basic: Story = { render: args => <Techradar {...commonProperties} /> }

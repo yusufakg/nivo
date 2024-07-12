@@ -18,7 +18,7 @@ type InnerRadarProps<RawDatum> = Omit<
 const InnerRadar = <RawDatum,>({
     sectorData,
     ringData,
-    blipData,
+    blipData = [],
     layers = svgDefaultProps.layers,
     rotation: rotationDegrees = svgDefaultProps.rotation,
     margin: partialMargin,

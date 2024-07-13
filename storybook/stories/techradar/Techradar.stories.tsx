@@ -1,4 +1,4 @@
-import { Techradar } from '@nivo/techradar'
+import { ResponsiveTechradar, Techradar } from '@nivo/techradar'
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
@@ -39,13 +39,19 @@ const blips = [
 ]
 
 const commonProperties = {
-    width: 700,
-    height: 700,
-    margin: { top: 60, right: 80, bottom: 30, left: 80 },
     sectorData: sectors,
     ringData: rings,
     blipData: blips,
+    margin: { top: 60, right: 60, bottom: 60, left: 60 },
     animate: true,
 }
 
-export const Basic: Story = { render: args => <Techradar {...commonProperties} /> }
+export const Basic: Story = { render: args => <Techradar width={600} height={600} {...commonProperties} /> }
+
+export const Responsive: Story = {
+    render: args => (
+        <div style={{ width: 300, height: 300 }}>
+            <ResponsiveTechradar {...commonProperties} />
+        </div>
+    ),
+}

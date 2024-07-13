@@ -36,7 +36,6 @@ export const useCirclePacking = <RawData>({
     ringIndices: { index: string; data: string }[]
     gridShape: RadarCommonProps<RawData>['gridShape'] // TODO: (suggestion) not used, allow calculation of linear gridShape
 }): ComputedDatum<RawData>[] => {
-    console.log('useCirclePacking', data)
     if (!data || data.length === 0) return []
 
     const getId = usePropertyAccessor<RawData, string>(id)

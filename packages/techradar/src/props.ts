@@ -12,7 +12,7 @@ export const svgDefaultProps = {
     gridLabelOffset: 16,
     gridLabel: RadarGridLabel,
 
-    colors: { scheme: 'nivo' } as OrdinalColorScaleConfig,
+    colors: { scheme: 'tableau10' } as OrdinalColorScaleConfig,
 
     role: 'img',
 

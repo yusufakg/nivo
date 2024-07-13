@@ -46,7 +46,9 @@ const commonProperties = {
     animate: true,
 }
 
-export const Basic: Story = { render: args => <Techradar width={600} height={600} {...commonProperties} /> }
+export const Basic: Story = {
+    render: args => <Techradar width={600} height={600} {...commonProperties} />,
+}
 
 export const Responsive: Story = {
     render: args => (

@@ -49,10 +49,7 @@ export type RadarLayerId = 'grid' | 'circles' | 'labels'
 
 export type RadarColorMapping = Record<string, string>
 
-export type MouseHandler<RawData> = (
-    datum: ComputedDatum<RawData>,
-    event: React.MouseEvent
-) => void
+export type MouseHandler<RawData> = (datum: ComputedDatum<RawData>, event: React.MouseEvent) => void
 
 export type MouseHandlers<RawData> = {
     onClick?: MouseHandler<RawData>

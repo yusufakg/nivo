@@ -1,6 +1,6 @@
 {
     "name": "@nivo/techradar",
-    "version": "0.87.0",
+    "version": "0.88.0",
     "license": "MIT",
     "author": {
         "name": "Raphaël Benitte",
@@ -29,9 +29,9 @@
         "!dist/tsconfig.tsbuildinfo"
     ],
     "dependencies": {
-        "@nivo/colors": "workspace:*",
-        "@nivo/core": "workspace:*",
-        "@nivo/tooltip": "workspace:*",
+        "@nivo/colors": "0.88.0",
+        "@nivo/core": "0.88.0",
+        "@nivo/tooltip": "0.88.0",
         "@react-spring/web": "9.4.5 || ^9.7.2",
         "@types/d3-hierarchy": "^1.1.8",
         "@types/d3-scale": "^4.0.8",

@@ -4,10 +4,10 @@ import { RadarGridLabels } from './RadarGridLabels'
 import { RadarGridLevels } from './RadarGridLevels'
 import { GridLabelComponent, RadarCommonProps, RingIndex, SectorIndex } from './types'
 
-interface RadarGridProps<RawDatum> {
+interface RadarGridProps<RawData> {
     sectorIndices: SectorIndex[]
     ringIndices: RingIndex[]
-    shape: RadarCommonProps<RawDatum>['gridShape']
+    shape: RadarCommonProps<RawData>['gridShape']
     radius: number
     rotation: number
     angleStep: number
@@ -18,7 +18,7 @@ interface RadarGridProps<RawDatum> {
     labelAngles: number[]
 }
 
-export const RadarGrid = <RawDatum,>({
+export const RadarGrid = <RawData,>({
     sectorIndices,
     ringIndices,
     shape,
@@ -30,7 +30,7 @@ export const RadarGrid = <RawDatum,>({
     radii,
     angles,
     labelAngles,
-}: RadarGridProps<RawDatum>) => {
+}: RadarGridProps<RawData>) => {
     const theme = useTheme()
 
     return (

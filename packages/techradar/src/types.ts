@@ -25,7 +25,7 @@ export interface GridLabelProps {
 }
 export type GridLabelComponent = FunctionComponent<GridLabelProps>
 
-export interface ComputedDatum<RawDatum> {
+export interface ComputedDatum<RawData> {
     id: string
     // contain own id plus all ancestor ids
     path: string[]
@@ -39,30 +39,30 @@ export interface ComputedDatum<RawDatum> {
     // defined when using patterns or gradients
     fill?: string
     // contains the raw node's data
-    data: RawDatum
+    data: RawData
     depth: number
     height: number
-    parent?: ComputedDatum<RawDatum>
+    parent?: ComputedDatum<RawData>
 }
 
 export type RadarLayerId = 'grid' | 'circles' | 'labels'
 
 export type RadarColorMapping = Record<string, string>
 
-export type MouseHandler<RawDatum> = (
-    datum: ComputedDatum<RawDatum>,
+export type MouseHandler<RawData> = (
+    datum: ComputedDatum<RawData>,
     event: React.MouseEvent
 ) => void
 
-export type MouseHandlers<RawDatum> = {
-    onClick?: MouseHandler<RawDatum>
-    onMouseEnter?: MouseHandler<RawDatum>
-    onMouseMove?: MouseHandler<RawDatum>
-    onMouseLeave?: MouseHandler<RawDatum>
+export type MouseHandlers<RawData> = {
+    onClick?: MouseHandler<RawData>
+    onMouseEnter?: MouseHandler<RawData>
+    onMouseMove?: MouseHandler<RawData>
+    onMouseLeave?: MouseHandler<RawData>
 }
 
-export type CircleProps<RawDatum> = {
-    node: ComputedDatum<RawDatum>
+export type CircleProps<RawData> = {
+    node: ComputedDatum<RawData>
     style: {
         x: SpringValue<number>
         y: SpringValue<number>
@@ -73,18 +73,18 @@ export type CircleProps<RawDatum> = {
         borderWidth: number
         borderColor: SpringValue<string>
     }
-} & MouseHandlers<RawDatum>
+} & MouseHandlers<RawData>
 
-export type CircleComponent<RawDatum> = (props: CircleProps<RawDatum>) => JSX.Element
+export type CircleComponent<RawData> = (props: CircleProps<RawData>) => JSX.Element
 
-export interface ComputedLabel<RawDatum> {
+export interface ComputedLabel<RawData> {
     label: string | number
     textColor: string
-    node: ComputedDatum<RawDatum>
+    node: ComputedDatum<RawData>
 }
 
-export interface LabelProps<RawDatum> {
-    node: ComputedDatum<RawDatum>
+export interface LabelProps<RawData> {
+    node: ComputedDatum<RawData>
     label: string | number
     style: {
         x: SpringValue<number>
@@ -96,40 +96,40 @@ export interface LabelProps<RawDatum> {
     }
 }
 
-export type LabelComponent<RawDatum> = (props: LabelProps<RawDatum>) => JSX.Element
+export type LabelComponent<RawData> = (props: LabelProps<RawData>) => JSX.Element
 
-export interface CirclePackingCommonProps<RawDatum> {
-    blipData: RawDatum[]
-    sector: PropertyAccessor<RawDatum, string>
-    ring: PropertyAccessor<RawDatum, string>
-    id: PropertyAccessor<RawDatum, string>
+export interface CirclePackingCommonProps<RawData> {
+    blipData: RawData[]
+    sector: PropertyAccessor<RawData, string>
+    ring: PropertyAccessor<RawData, string>
+    id: PropertyAccessor<RawData, string>
     padding: number
     leavesOnly: boolean
     theme?: Theme
-    colors: OrdinalColorScaleConfig<Omit<ComputedDatum<RawDatum>, 'color' | 'fill'>>
+    colors: OrdinalColorScaleConfig<Omit<ComputedDatum<RawData>, 'color' | 'fill'>>
     colorBy: 'id' | 'depth'
     inheritColorFromParent: boolean
-    childColor: InheritedColorConfig<ComputedDatum<RawDatum>>
+    childColor: InheritedColorConfig<ComputedDatum<RawData>>
     borderWidth: number
-    borderColor: InheritedColorConfig<ComputedDatum<RawDatum>>
-    circleComponent: CircleComponent<RawDatum>
+    borderColor: InheritedColorConfig<ComputedDatum<RawData>>
+    circleComponent: CircleComponent<RawData>
     enableLabels: boolean
-    label: PropertyAccessor<ComputedDatum<RawDatum>, string>
-    labelsFilter?: (label: ComputedLabel<RawDatum>) => boolean
+    label: PropertyAccessor<ComputedDatum<RawData>, string>
+    labelsFilter?: (label: ComputedLabel<RawData>) => boolean
     labelsSkipRadius: number
-    labelTextColor: InheritedColorConfig<ComputedDatum<RawDatum>>
-    labelComponent: LabelComponent<RawDatum>
+    labelTextColor: InheritedColorConfig<ComputedDatum<RawData>>
+    labelComponent: LabelComponent<RawData>
     isInteractive: boolean
-    tooltip: (props: ComputedDatum<RawDatum>) => JSX.Element
+    tooltip: (props: ComputedDatum<RawData>) => JSX.Element
     zoomedId?: string | null
     animate: boolean
     motionConfig: MotionProps['motionConfig']
 }
 
-type CirclePackingProps<RawDatum> = Omit<CirclePackingCommonProps<RawDatum>, 'blipData'> &
-    MouseHandlers<RawDatum>
+type CirclePackingProps<RawData> = Omit<CirclePackingCommonProps<RawData>, 'blipData'> &
+    MouseHandlers<RawData>
 
-export interface RadarCommonProps<RawDatum> {
+export interface RadarCommonProps<RawData> {
     rotation: number
     layers: RadarLayerId[]
     margin: Box
@@ -143,11 +143,11 @@ export interface RadarCommonProps<RawDatum> {
     ariaLabel: AriaAttributes['aria-label']
     ariaLabelledBy: AriaAttributes['aria-labelledby']
     ariaDescribedBy: AriaAttributes['aria-describedby']
-    blipData: RawDatum[]
-    circlePackingProps: CirclePackingProps<RawDatum>
+    blipData: RawData[]
+    circlePackingProps: CirclePackingProps<RawData>
 }
 
-export type RadarSvgProps<RawDatum> = Partial<RadarCommonProps<RawDatum>> &
+export type RadarSvgProps<RawData> = Partial<RadarCommonProps<RawData>> &
     RadarDataProps &
     Dimensions &
     MotionProps

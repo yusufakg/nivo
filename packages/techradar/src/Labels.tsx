@@ -5,31 +5,31 @@ import { interpolateRadius } from './Circles'
 import { useCirclePackingLabels } from './hooks-packing'
 import { CirclePackingCommonProps, ComputedDatum, ComputedLabel, LabelComponent } from './types'
 
-interface CirclesProps<RawDatum> {
-    nodes: ComputedDatum<RawDatum>[]
-    label: CirclePackingCommonProps<RawDatum>['label']
-    filter?: CirclePackingCommonProps<RawDatum>['labelsFilter']
-    skipRadius: CirclePackingCommonProps<RawDatum>['labelsSkipRadius']
-    textColor: CirclePackingCommonProps<RawDatum>['labelTextColor']
-    component: LabelComponent<RawDatum>
+interface CirclesProps<RawData> {
+    nodes: ComputedDatum<RawData>[]
+    label: CirclePackingCommonProps<RawData>['label']
+    filter?: CirclePackingCommonProps<RawData>['labelsFilter']
+    skipRadius: CirclePackingCommonProps<RawData>['labelsSkipRadius']
+    textColor: CirclePackingCommonProps<RawData>['labelTextColor']
+    component: LabelComponent<RawData>
 }
 
-const getTransitionPhases = <RawDatum,>() => ({
-    enter: (label: ComputedLabel<RawDatum>) => ({
+const getTransitionPhases = <RawData,>() => ({
+    enter: (label: ComputedLabel<RawData>) => ({
         x: label.node.x,
         y: label.node.y,
         radius: label.node.radius,
         textColor: label.textColor,
         opacity: 0,
     }),
-    update: (label: ComputedLabel<RawDatum>) => ({
+    update: (label: ComputedLabel<RawData>) => ({
         x: label.node.x,
         y: label.node.y,
         radius: label.node.radius,
         textColor: label.textColor,
         opacity: 1,
     }),
-    leave: (label: ComputedLabel<RawDatum>) => ({
+    leave: (label: ComputedLabel<RawData>) => ({
         x: label.node.x,
         y: label.node.y,
         radius: label.node.radius,
@@ -38,14 +38,14 @@ const getTransitionPhases = <RawDatum,>() => ({
     }),
 })
 
-export const Labels = <RawDatum,>({
+export const Labels = <RawData,>({
     nodes,
     label,
     filter,
     skipRadius,
     textColor,
     component,
-}: CirclesProps<RawDatum>) => {
+}: CirclesProps<RawData>) => {
     const { animate, config: springConfig } = useMotionConfig()
 
     const labels = useCirclePackingLabels({
@@ -56,10 +56,10 @@ export const Labels = <RawDatum,>({
         textColor,
     })
 
-    const transitionPhases = useMemo(() => getTransitionPhases<RawDatum>(), [])
+    const transitionPhases = useMemo(() => getTransitionPhases<RawData>(), [])
 
     const transition = useTransition<
-        ComputedLabel<RawDatum>,
+        ComputedLabel<RawData>,
         {
             x: number
             y: number

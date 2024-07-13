@@ -1,10 +1,10 @@
 import { BasicTooltip } from '@nivo/tooltip'
 import { ComputedDatum } from './types'
 
-export const CirclePackingTooltip = <RawDatum,>({
+export const CirclePackingTooltip = <RawData,>({
     id,
     formattedValue,
     color,
-}: ComputedDatum<RawDatum>) => (
+}: ComputedDatum<RawData>) => (
     <BasicTooltip id={id} value={formattedValue} enableChip={true} color={color} />
 )

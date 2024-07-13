@@ -5,9 +5,7 @@ import { MouseEvent, useMemo } from 'react'
 import { getValidPosition, polarToCartesian, simulatedAnnealing } from './hooks-fns'
 import { CirclePackingCommonProps, ComputedDatum, MouseHandlers, RadarCommonProps } from './types'
 
-// TODO: (suggestion) allow calculation of linear gridShape
-// gridShape,
-export const useCirclePacking = <RawDatum>({
+export const useCirclePacking = <RawData>({
     data,
     id,
     padding,
@@ -22,36 +20,36 @@ export const useCirclePacking = <RawDatum>({
     sectorIndices,
     ringIndices,
 }: {
-    data: CirclePackingCommonProps<RawDatum>['blipData'] | undefined
-    id: CirclePackingCommonProps<RawDatum>['id']
-    padding: CirclePackingCommonProps<RawDatum>['padding']
-    leavesOnly: CirclePackingCommonProps<RawDatum>['leavesOnly']
-    colors: CirclePackingCommonProps<RawDatum>['colors']
-    colorBy: CirclePackingCommonProps<RawDatum>['colorBy']
-    inheritColorFromParent: CirclePackingCommonProps<RawDatum>['inheritColorFromParent']
-    childColor: CirclePackingCommonProps<RawDatum>['childColor']
+    data: CirclePackingCommonProps<RawData>['blipData'] | undefined
+    id: CirclePackingCommonProps<RawData>['id']
+    padding: CirclePackingCommonProps<RawData>['padding']
+    leavesOnly: CirclePackingCommonProps<RawData>['leavesOnly']
+    colors: CirclePackingCommonProps<RawData>['colors']
+    colorBy: CirclePackingCommonProps<RawData>['colorBy']
+    inheritColorFromParent: CirclePackingCommonProps<RawData>['inheritColorFromParent']
+    childColor: CirclePackingCommonProps<RawData>['childColor']
     radii: number[]
     angles: number[]
     centerX: number
     centerY: number
     sectorIndices: { index: string; data: string }[]
     ringIndices: { index: string; data: string }[]
-    gridShape: RadarCommonProps<RawDatum>['gridShape']
-}): ComputedDatum<RawDatum>[] => {
+    gridShape: RadarCommonProps<RawData>['gridShape'] // TODO: (suggestion) not used, allow calculation of linear gridShape
+}): ComputedDatum<RawData>[] => {
     console.log('useCirclePacking', data)
     if (!data || data.length === 0) return []
 
-    const getId = usePropertyAccessor<RawDatum, string>(id)
-    const getColor = useOrdinalColorScale<Omit<ComputedDatum<RawDatum>, 'color' | 'fill'>>(
+    const getId = usePropertyAccessor<RawData, string>(id)
+    const getColor = useOrdinalColorScale<Omit<ComputedDatum<RawData>, 'color' | 'fill'>>(
         colors,
         colorBy
     )
     const theme = useTheme()
-    const getChildColor = useInheritedColor<ComputedDatum<RawDatum>>(childColor, theme)
+    const getChildColor = useInheritedColor<ComputedDatum<RawData>>(childColor, theme)
 
     const blipRadius = Math.max(...radii) / 20
     const clonedData = cloneDeep(data)
-    const nodes: ComputedDatum<RawDatum>[] = clonedData.map(d => ({
+    const nodes: ComputedDatum<RawData>[] = clonedData.map(d => ({
         data: d,
         value: 1,
         depth: 1,
@@ -112,9 +110,9 @@ export const useCirclePacking = <RawDatum>({
 }
 
 // TODO: for the (suggestion) in Techradar.tsx
-export const useCirclePackingZoom = <RawDatum>(
-    nodes: ComputedDatum<RawDatum>[],
-    zoomedId: CirclePackingCommonProps<RawDatum>['zoomedId'],
+export const useCirclePackingZoom = <RawData>(
+    nodes: ComputedDatum<RawData>[],
+    zoomedId: CirclePackingCommonProps<RawData>['zoomedId'],
     width: number,
     height: number
 ) =>
@@ -137,22 +135,22 @@ export const useCirclePackingZoom = <RawDatum>(
     }, [nodes, zoomedId, width, height])
 
 // TODO: for the (suggestion) in Techradar.tsx
-export const useCirclePackingLabels = <RawDatum>({
+export const useCirclePackingLabels = <RawData>({
     nodes,
     label,
     filter,
     skipRadius,
     textColor,
 }: {
-    nodes: ComputedDatum<RawDatum>[]
-    label: CirclePackingCommonProps<RawDatum>['label']
-    filter: CirclePackingCommonProps<RawDatum>['labelsFilter']
-    skipRadius: CirclePackingCommonProps<RawDatum>['labelsSkipRadius']
-    textColor: CirclePackingCommonProps<RawDatum>['labelTextColor']
+    nodes: ComputedDatum<RawData>[]
+    label: CirclePackingCommonProps<RawData>['label']
+    filter: CirclePackingCommonProps<RawData>['labelsFilter']
+    skipRadius: CirclePackingCommonProps<RawData>['labelsSkipRadius']
+    textColor: CirclePackingCommonProps<RawData>['labelTextColor']
 }) => {
-    const getLabel = usePropertyAccessor<ComputedDatum<RawDatum>, string | number>(label)
+    const getLabel = usePropertyAccessor<ComputedDatum<RawData>, string | number>(label)
     const theme = useTheme()
-    const getTextColor = useInheritedColor<ComputedDatum<RawDatum>>(textColor, theme)
+    const getTextColor = useInheritedColor<ComputedDatum<RawData>>(textColor, theme)
 
     const labels = useMemo(
         () =>
@@ -174,9 +172,9 @@ export const useCirclePackingLabels = <RawDatum>({
 }
 
 // TODO: handlers caused some performance issues, needs to be optimized
-export const useNodeMouseHandlers = <RawDatum>(
-    node: ComputedDatum<RawDatum>,
-    { onMouseEnter, onMouseMove, onMouseLeave, onClick }: MouseHandlers<RawDatum>
+export const useNodeMouseHandlers = <RawData>(
+    node: ComputedDatum<RawData>,
+    { onMouseEnter, onMouseMove, onMouseLeave, onClick }: MouseHandlers<RawData>
 ): Partial<
     Record<'onMouseEnter' | 'onMouseMove' | 'onMouseLeave' | 'onClick', (event: MouseEvent) => void>
 > =>

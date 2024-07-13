@@ -14,19 +14,19 @@ import { CircleComponent, CirclePackingCommonProps, ComputedDatum, MouseHandlers
 export const interpolateRadius = (radiusValue: SpringValue<number>) =>
     to([radiusValue], radius => Math.max(0, radius))
 
-type CirclesProps<RawDatum> = {
-    nodes: ComputedDatum<RawDatum>[]
-    borderWidth: CirclePackingCommonProps<RawDatum>['borderWidth']
-    borderColor: CirclePackingCommonProps<RawDatum>['borderColor']
-    component: CircleComponent<RawDatum>
-    isInteractive: CirclePackingCommonProps<RawDatum>['isInteractive']
-    tooltip: CirclePackingCommonProps<RawDatum>['tooltip']
-} & MouseHandlers<RawDatum>
+type CirclesProps<RawData> = {
+    nodes: ComputedDatum<RawData>[]
+    borderWidth: CirclePackingCommonProps<RawData>['borderWidth']
+    borderColor: CirclePackingCommonProps<RawData>['borderColor']
+    component: CircleComponent<RawData>
+    isInteractive: CirclePackingCommonProps<RawData>['isInteractive']
+    tooltip: CirclePackingCommonProps<RawData>['tooltip']
+} & MouseHandlers<RawData>
 
-const getTransitionPhases = <RawDatum,>(
-    getBorderColor: (node: ComputedDatum<RawDatum>) => string
+const getTransitionPhases = <RawData,>(
+    getBorderColor: (node: ComputedDatum<RawData>) => string
 ) => ({
-    enter: (node: ComputedDatum<RawDatum>) => ({
+    enter: (node: ComputedDatum<RawData>) => ({
         x: node.x,
         y: node.y,
         radius: 0,
@@ -34,7 +34,7 @@ const getTransitionPhases = <RawDatum,>(
         borderColor: getBorderColor(node),
         opacity: 0,
     }),
-    update: (node: ComputedDatum<RawDatum>) => ({
+    update: (node: ComputedDatum<RawData>) => ({
         x: node.x,
         y: node.y,
         radius: node.radius,
@@ -42,7 +42,7 @@ const getTransitionPhases = <RawDatum,>(
         borderColor: getBorderColor(node),
         opacity: 1,
     }),
-    leave: (node: ComputedDatum<RawDatum>) => ({
+    leave: (node: ComputedDatum<RawData>) => ({
         x: node.x,
         y: node.y,
         radius: 0,
@@ -52,7 +52,7 @@ const getTransitionPhases = <RawDatum,>(
     }),
 })
 
-export const Circles = <RawDatum,>({
+export const Circles = <RawData,>({
     nodes,
     borderWidth,
     borderColor,
@@ -63,13 +63,13 @@ export const Circles = <RawDatum,>({
     onMouseLeave,
     onClick,
     tooltip,
-}: CirclesProps<RawDatum>) => {
+}: CirclesProps<RawData>) => {
     const { showTooltipFromEvent, hideTooltip } = useTooltip()
 
     const handleMouseEnter = useMemo(() => {
         if (!isInteractive) return undefined
 
-        return (node: ComputedDatum<RawDatum>, event: MouseEvent) => {
+        return (node: ComputedDatum<RawData>, event: MouseEvent) => {
             showTooltipFromEvent(createElement(tooltip, node), event)
             onMouseEnter?.(node, event)
         }
@@ -78,7 +78,7 @@ export const Circles = <RawDatum,>({
     const handleMouseMove = useMemo(() => {
         if (!isInteractive) return undefined
 
-        return (node: ComputedDatum<RawDatum>, event: MouseEvent) => {
+        return (node: ComputedDatum<RawData>, event: MouseEvent) => {
             showTooltipFromEvent(createElement(tooltip, node), event)
             onMouseMove?.(node, event)
         }
@@ -87,7 +87,7 @@ export const Circles = <RawDatum,>({
     const handleMouseLeave = useMemo(() => {
         if (!isInteractive) return undefined
 
-        return (node: ComputedDatum<RawDatum>, event: MouseEvent) => {
+        return (node: ComputedDatum<RawData>, event: MouseEvent) => {
             hideTooltip()
             onMouseLeave?.(node, event)
         }
@@ -96,7 +96,7 @@ export const Circles = <RawDatum,>({
     const handleClick = useMemo(() => {
         if (!isInteractive) return undefined
 
-        return (node: ComputedDatum<RawDatum>, event: MouseEvent) => {
+        return (node: ComputedDatum<RawData>, event: MouseEvent) => {
             onClick?.(node, event)
         }
     }, [isInteractive, onClick])
@@ -104,15 +104,15 @@ export const Circles = <RawDatum,>({
     const { animate, config: springConfig } = useMotionConfig()
 
     const theme = useTheme()
-    const getBorderColor = useInheritedColor<ComputedDatum<RawDatum>>(borderColor, theme)
+    const getBorderColor = useInheritedColor<ComputedDatum<RawData>>(borderColor, theme)
 
     const transitionPhases = useMemo(
-        () => getTransitionPhases<RawDatum>(getBorderColor),
+        () => getTransitionPhases<RawData>(getBorderColor),
         [getBorderColor]
     )
 
     const transition = useTransition<
-        ComputedDatum<RawDatum>,
+        ComputedDatum<RawData>,
         {
             x: number
             y: number

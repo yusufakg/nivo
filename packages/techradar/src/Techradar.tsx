@@ -10,12 +10,12 @@ import { useRadar } from './hooks-radar'
 import { svgDefaultProps } from './props'
 import { ComputedDatum, RadarLayerId, RadarSvgProps } from './types'
 
-type InnerRadarProps<RawDatum> = Omit<
-    RadarSvgProps<RawDatum>,
+type InnerTechradarProps<RawData> = Omit<
+    RadarSvgProps<RawData>,
     'animate' | 'motionConfig' | 'renderWrapper' | 'theme'
 >
 
-const InnerRadar = <RawDatum,>({
+const InnerTechradar = <RawData,>({
     sectorData,
     ringData,
     blipData = [],
@@ -35,21 +35,21 @@ const InnerRadar = <RawDatum,>({
     circlePackingProps = {
         ...svgDefaultProps.circlePackingProps,
         colors: svgDefaultProps.colors as OrdinalColorScaleConfig<
-            Omit<ComputedDatum<RawDatum>, 'color' | 'fill'>
+            Omit<ComputedDatum<RawData>, 'color' | 'fill'>
         >,
         childColor: svgDefaultProps.circlePackingProps.childColor as InheritedColorConfig<
-            ComputedDatum<RawDatum>
+            ComputedDatum<RawData>
         >,
         borderColor: svgDefaultProps.circlePackingProps.borderColor as InheritedColorConfig<
-            ComputedDatum<RawDatum>
+            ComputedDatum<RawData>
         >,
         labelTextColor: svgDefaultProps.circlePackingProps.labelTextColor as InheritedColorConfig<
-            ComputedDatum<RawDatum>
+            ComputedDatum<RawData>
         >,
         circleComponent: CircleSvg,
         labelComponent: LabelSvg,
     },
-}: InnerRadarProps<RawDatum>) => {
+}: InnerTechradarProps<RawData>) => {
     const { margin, innerWidth, innerHeight, outerWidth, outerHeight } = useDimensions(
         width,
         height,
@@ -79,7 +79,7 @@ const InnerRadar = <RawDatum,>({
         }
     }, [sectorIndices, ringIndices, radius, rotation, angleStep])
 
-    const nodes = useCirclePacking<RawDatum>({
+    const nodes = useCirclePacking<RawData>({
         ...circlePackingProps,
         data: blipData,
         radii,
@@ -92,7 +92,7 @@ const InnerRadar = <RawDatum,>({
     })
 
     // TODO: (suggestion) zooming into a blip and use of d3-hierarchy pack
-    // const zoomedNodes = useCirclePackingZoom<RawDatum>(
+    // const zoomedNodes = useCirclePackingZoom<RawData>(
     //     nodes,
     //     circlePackingProps.zoomedId,
     //     innerWidth,
@@ -127,7 +127,7 @@ const InnerRadar = <RawDatum,>({
 
     if (layers.includes('circles')) {
         layerById.circles = (
-            <Circles<RawDatum>
+            <Circles<RawData>
                 key="circles"
                 nodes={nodes}
                 borderWidth={circlePackingProps.borderWidth}
@@ -145,7 +145,7 @@ const InnerRadar = <RawDatum,>({
 
     // if (enableLabels && layers.includes('labels')) {
     //     layerById.labels = (
-    //         <Labels<RawDatum>
+    //         <Labels<RawData>
     //             key="labels"
     //             nodes={zoomedNodes}
     //             label={label}
@@ -174,13 +174,13 @@ const InnerRadar = <RawDatum,>({
     )
 }
 
-export const Techradar = <RawDatum,>({
+export const Techradar = <RawData,>({
     animate = svgDefaultProps.animate,
     motionConfig = svgDefaultProps.motionConfig,
     theme,
     renderWrapper,
     ...otherProps
-}: RadarSvgProps<RawDatum>) => (
+}: RadarSvgProps<RawData>) => (
     <Container
         {...{
             animate,
@@ -189,6 +189,6 @@ export const Techradar = <RawDatum,>({
             theme,
         }}
     >
-        <InnerRadar {...otherProps} />
+        <InnerTechradar {...otherProps} />
     </Container>
 )

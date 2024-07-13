@@ -3,7 +3,7 @@ import { scaleLinear } from 'd3-scale'
 import { useMemo } from 'react'
 import { RadarCommonProps, RadarDataProps } from './types'
 
-export const useRadar = <RawDatum>({
+export const useRadar = <RawData>({
     sectorData,
     ringData,
     rotationDegrees,
@@ -12,10 +12,10 @@ export const useRadar = <RawDatum>({
 }: {
     sectorData: RadarDataProps['sectorData']
     ringData: RadarDataProps['ringData']
-    rotationDegrees: RadarCommonProps<RawDatum>['rotation']
+    rotationDegrees: RadarCommonProps<RawData>['rotation']
     width: number
     height: number
-    colors: RadarCommonProps<RawDatum>['colors']
+    colors: RadarCommonProps<RawData>['colors'] // TODO: (suggestion) not used, add background colors
 }) => {
     const sectorIndices = useMemo(
         () => sectorData.map((data, i) => ({ index: `s${i.toString()}`, data })),
